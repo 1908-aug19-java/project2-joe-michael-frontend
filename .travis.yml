@@ -1,10 +1,29 @@
-language: java
-
 # whitelist
 branches:
   only:
     - dev
     - Michael_Zhang
 
+dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - '8'
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+    - ./node_modules
+
+install:
+  - npm install
+
 script:
-  - mvn sonar:sonar -Dsonar.projectKey=project2-joe-michael-frontend -Dsonar.organization=shirosaya25 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_KEY
+  - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
