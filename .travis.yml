@@ -4,26 +4,13 @@ branches:
     - dev
     - Michael_Zhang
 
-dist: trusty
-sudo: false
-
 language: node_js
 node_js:
-  - '8'
-
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
-
-cache:
-  directories:
-    - ./node_modules
-
-install:
-  - npm install
-
+  - "9"
+dist: trusty
+sudo: required
+before_script:
+  - npm install -g @angular/cli
 script:
-  - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+- ng lint
+- ng build --prod --base-href https://github.com/1908-aug19-java/project2-joe-michael-frontend
