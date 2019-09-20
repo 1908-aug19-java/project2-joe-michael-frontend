@@ -1,0 +1,4 @@
+language: java
+
+script:
+  - mvn sonar:sonar -Dsonar.projectKey=project2-joe-michael-frontend -Dsonar.organization=shirosaya25 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_KEY
