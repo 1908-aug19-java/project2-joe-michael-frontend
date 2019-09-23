@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login.service';
+import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,18 +14,18 @@ export class LoginComponent implements OnInit {
 
     loginStatus = 0;
 
-    constructor(private loginService: LoginService, private router: Router) { }
+    constructor(private userService: UserService, private router: Router) { }
 
     ngOnInit() {
     }
 
     onSignInClick() {
 
-        this.loginStatus = this.loginService.logIn(this.username.trim(), this.password.trim());
+        this.loginStatus = this.userService.logIn(this.username.trim(), this.password.trim());
 
         if (this.loginStatus === 1) {
 
-            this.loginService.change(true);
+            this.userService.change(true);
             this.router.navigate(['/user']);
         }
     }

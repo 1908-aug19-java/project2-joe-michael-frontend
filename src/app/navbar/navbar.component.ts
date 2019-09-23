@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login.service';
+import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { User } from '../user';
 
@@ -10,7 +10,7 @@ import { User } from '../user';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   loginSub;
   userSub;
@@ -19,14 +19,14 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
 
-      this.loginSub = this.loginService.getLoginStatus().subscribe(item => this.loginStatus = item);
-      this.userSub = this.loginService.getUser().subscribe(item => this.user = item);
+      this.loginSub = this.userService.getLoginStatus().subscribe(item => this.loginStatus = item);
+      this.userSub = this.userService.getUser().subscribe(item => this.user = item);
   }
 
   logout() {
 
       window.sessionStorage.clear();
-      this.loginService.change(false);
+      this.userService.change(false);
       this.router.navigate(['/']);
   }
 

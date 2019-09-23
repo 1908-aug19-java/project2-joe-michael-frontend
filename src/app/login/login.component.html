@@ -12,7 +12,7 @@
 
                 <label for="login-form-username">Username or Email</label>
                 <input [(ngModel)]="username" name="username" type="text" class="form-control col-12" id="login-form-username" placeholder="">
-                <small *ngIf="loginStatus==2" id="login-error-message" class="form-text text-danger">Invalid Username Format</small>
+                <small *ngIf="loginStatus==2" id="login-username-error-message" class="form-text text-danger">Invalid Username Format</small>
 
             </div>
 
@@ -20,7 +20,7 @@
 
                 <label for="login-form-password">Password</label>
                 <input [(ngModel)]="password" name="password" type="password" class="form-control col-12" id="login-form-password" placeholder="">
-                <small *ngIf="loginStatus==3" id="login-error-message" class="form-text text-danger">Invalid Username/Password Combination</small>
+                <small *ngIf="loginStatus==3" id="login-combination-error-message" class="form-text text-danger">Invalid Username/Password Combination</small>
 
             </div>
 
