@@ -12,14 +12,14 @@ export class NavbarComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router) { }
 
   loginSub;
-  loginStatus: boolean = false;
+  loginStatus = false;
 
   ngOnInit() {
 
       this.loginSub = this.loginService.getLoginStatus().subscribe(item => this.loginStatus = item);
   }
 
-  logout(){
+  logout() {
 
       this.loginService.change(false);
       this.router.navigate(['/']);

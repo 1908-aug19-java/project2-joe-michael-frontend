@@ -9,21 +9,21 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-    username: string = '';
-    password: string = '';
+    username = '';
+    password = '';
 
-    loginStatus: number = 0;
+    loginStatus = 0;
 
     constructor(private loginService: LoginService, private router: Router) { }
 
     ngOnInit() {
     }
 
-    onSignInClick(){
+    onSignInClick() {
 
         this.loginStatus = this.loginService.logIn(this.username.trim(), this.password.trim());
 
-        if(this.loginStatus == 1){
+        if (this.loginStatus === 1) {
 
             this.loginService.change(true);
             this.router.navigate(['/user']);
