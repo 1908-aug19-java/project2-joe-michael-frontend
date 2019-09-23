@@ -35,6 +35,10 @@
                 <button class="btn btn-outline-light">Sign Up</button>
             </li>
 
+            <li *ngIf="loginStatus==true" class="nav-item" style="padding-right: 15px!important;">
+                <a class="nav-link" href="#">{{(user.firstname + ' ' + user.lastname) | titlecase}}</a>
+            </li>
+
             <li *ngIf="loginStatus==true" class="nav-item">
                 <button (click)="logout()" class="btn btn-outline-light">Log Out</button>
             </li>
