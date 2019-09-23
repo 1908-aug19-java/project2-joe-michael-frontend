@@ -6,11 +6,16 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component'
+import { NgModel, FormsModule } from '@angular/forms';
+import { UserHomeComponent } from './user-home/user-home.component';
 
 const appRoutes: Routes = [
 
   {
     path: 'login', component: LoginComponent,
+  },
+  {
+    path: 'user', component: UserHomeComponent
   }
 
 ]
@@ -19,11 +24,13 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    LoginComponent
+    LoginComponent,
+    UserHomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     RouterModule.forRoot(
       
       appRoutes,
