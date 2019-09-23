@@ -1,0 +1,7 @@
+organization=shirosaya25
+projectKey=project2-joe-michael-frontend
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.678
+dashboardUrl=https://sonarcloud.io/dashboard?id=project2-joe-michael-frontend
+ceTaskId=AW1O3ftX9uuuyZd7o6vr
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AW1O3ftX9uuuyZd7o6vr
