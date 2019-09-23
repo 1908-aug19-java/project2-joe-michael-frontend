@@ -78,11 +78,11 @@ export class UserService {
 
     signUp(username: string, password: string, confirmationPassword: string): number {
 
-        if(username === '' || password === '' || confirmationPassword === ''){
+        if (username === '' || password === '' || confirmationPassword === '') {
 
             return 6;
 
-        } else if(password !== confirmationPassword) {
+        } else if (password !== confirmationPassword) {
 
             return 4;
 
@@ -96,16 +96,16 @@ export class UserService {
         }
 
 
-        let newUser: User = {
+        const newUser: User = {
 
             id: 3,
             username: username.toLowerCase(),
-            password: password,
+            password: '{password}',
             email: username.toLowerCase(),
             firstname: '',
             lastname: '',
             level: 1
-        }
+        };
 
         this.change(true);
         this.sendUser(newUser);
