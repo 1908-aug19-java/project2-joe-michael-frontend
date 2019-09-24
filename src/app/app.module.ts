@@ -9,17 +9,26 @@ import { LoginComponent } from './login/login.component';
 import { NgModel, FormsModule } from '@angular/forms';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { LoginGuard } from './login.guard';
+import { NoLoginGuard } from './no-login.guard';
+import { UserTeamNavComponent } from './user-team-nav/user-team-nav.component';
 
 const appRoutes: Routes = [
 
     {
-        path: 'login', component: LoginComponent
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [NoLoginGuard]
     },
     {
-        path: 'user', component: UserHomeComponent
+        path: 'user',
+        component: UserHomeComponent,
+        canActivate: [LoginGuard]
     },
     {
-        path: 'signup', component: SignUpComponent
+        path: 'signup',
+        component: SignUpComponent,
+        canActivate: [NoLoginGuard]
     },
     {
         path: 'landing', component: LandingComponent
@@ -28,7 +37,7 @@ const appRoutes: Routes = [
         path: '#', redirectTo: 'landing', pathMatch: 'full'
     },
     {
-        path: '', redirectTo: 'landing', pathMatch: 'full'
+        path: '**', redirectTo: 'landing', pathMatch: 'full'
     }
 
 ];
@@ -41,6 +50,7 @@ const appRoutes: Routes = [
         UserHomeComponent,
         SignUpComponent,
         LandingComponent,
+        UserTeamNavComponent,
     ],
     imports: [
         BrowserModule,
@@ -55,8 +65,13 @@ const appRoutes: Routes = [
             }
         )
     ],
-    providers: [],
+    providers: [
+        LoginGuard,
+        NoLoginGuard
+    ],
     bootstrap: [AppComponent]
 
 })
+
+
 export class AppModule { }
