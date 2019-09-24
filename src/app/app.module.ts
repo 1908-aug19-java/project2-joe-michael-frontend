@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { LandingComponent } from './components/landing/landing.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { NgModel, FormsModule } from '@angular/forms';
@@ -30,7 +30,8 @@ const appRoutes: Routes = [
         NavbarComponent,
         LoginComponent,
         UserHomeComponent,
-        SignUpComponent
+        SignUpComponent,
+        LandingComponent,
     ],
     imports: [
         BrowserModule,
@@ -47,5 +48,6 @@ const appRoutes: Routes = [
     ],
     providers: [],
     bootstrap: [AppComponent]
+
 })
 export class AppModule { }
