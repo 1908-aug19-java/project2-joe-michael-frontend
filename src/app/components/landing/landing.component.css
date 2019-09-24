@@ -1,0 +1,19 @@
+.image-container-1{
+    background-image: url("landingImages/sadio-mane-4k-back-view-football-stars-senegalese-footballer-besthqwallpapers.com-800x600.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+}
+
+.image-container-2{
+    background-image: url("landingImages/lionel-messi-2019-blue-uniform-barcelona-fc-argentinian-footballers-besthqwallpapers.com-1024x768.jpg");
+    background-size: cover;
+    background-position: center;
+}
+.background{
+    background-color: #343a40;
+    color: white;
+}
+
+
+
