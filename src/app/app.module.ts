@@ -20,6 +20,15 @@ const appRoutes: Routes = [
     },
     {
         path: 'signup', component: SignUpComponent
+    },
+    {
+        path: 'landing', component: LandingComponent
+    },
+    {
+        path: '#', redirectTo: 'landing', pathMatch: 'full'
+    },
+    {
+        path: '', redirectTo: 'landing', pathMatch: 'full'
     }
 
 ];
