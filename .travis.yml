@@ -14,4 +14,4 @@ before_script:
 script:
 - ng lint
 - ng build --prod --base-href https://github.com/1908-aug19-java/project2-joe-michael-frontend
-- ng run sonar
+- npm run sonar

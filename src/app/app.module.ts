@@ -5,35 +5,47 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component'
+import { LoginComponent } from './login/login.component';
+import { NgModel, FormsModule } from '@angular/forms';
+import { UserHomeComponent } from './user-home/user-home.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 const appRoutes: Routes = [
 
-  {
-    path: 'login', component: LoginComponent,
-  }
+    {
+        path: 'login', component: LoginComponent
+    },
+    {
+        path: 'user', component: UserHomeComponent
+    },
+    {
+        path: 'signup', component: SignUpComponent
+    }
 
-]
+];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    LoginComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule.forRoot(
-      
-      appRoutes,
+    declarations: [
+        AppComponent,
+        NavbarComponent,
+        LoginComponent,
+        UserHomeComponent,
+        SignUpComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        RouterModule.forRoot(
 
-      { 
-        enableTracing: true
-      }
-    )
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+            appRoutes,
+
+            {
+                enableTracing: true
+            }
+        )
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

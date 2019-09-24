@@ -27,13 +27,22 @@
 
         <ul class="navbar-nav ml-auto">
 
-            <li class="nav-item" style="padding-right: 15px!important;">
+            <li *ngIf="loginStatus==false" class="nav-item" style="padding-right: 15px!important;">
                 <a class="nav-link" routerLink="/login" routerLinkActive="active" href="#">Sign In</a>
             </li>
 
-            <li class="nav-item">
-                <button class="btn btn-outline-light">Sign Up</button>
+            <li *ngIf="loginStatus==false" class="nav-item">
+                <button routerLink="/signup" routerLinkActive="active" class="btn btn-outline-light">Sign Up</button>
             </li>
+
+            <li *ngIf="loginStatus==true" class="nav-item" style="padding-right: 15px!important;">
+                <a class="nav-link" routerLink="/user" routerLinkActive="active" href="#">{{user.email | titlecase}}</a>
+            </li>
+
+            <li *ngIf="loginStatus==true" class="nav-item">
+                <button (click)="logout()" class="btn btn-outline-light">Log Out</button>
+            </li>
+
 
         </ul>
     </div>
