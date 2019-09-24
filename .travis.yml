@@ -2,6 +2,7 @@
 branches:
   only:
     - dev
+    - master
     - Michael_Zhang
 
 language: node_js
