@@ -1,0 +1,39 @@
+<div class="text-center m-0 d-flex flex-column justify-content-center signup-div">
+
+    <div>
+        <h4 class = "display-4 text-dark">Sign Up</h4>
+    </div>
+
+    <form class="col-2 offset-5 bg-light signup-form">
+
+        <div style="padding-top:30px; padding-bottom: 30px">
+
+            <div class="form-group text-left">
+
+                <label for="signup-email-input">Email</label>
+                <input [(ngModel)]="email" type="Email" name="signup-email-input" class="form-control col-12" id="signup-email-input" placeholder="">
+                <small *ngIf="signUpStatus==2 || signUpStatus==5" id="signup-email-input-error-message" class="form-text text-danger">{{errorMessages[signUpStatus]}}</small>
+
+            </div>
+
+            <div class="form-group text-left">
+
+                <label for="signup-password-input">Password</label>
+                <input [(ngModel)]="password" type="Password" name="signup-password-input" class="form-control col-12" id="signup-password-input" placeholder="">
+
+            </div>
+
+            <div class="form-group text-left" style="padding-bottom: 15px!important;">
+
+                <label for="signup-confirmation-password-input">Confirm Password</label>
+                <input [(ngModel)]="confirmationPassword" type="Password" name="signup-confirmation-password-input" class="form-control col-12" id="signup-confirmation-password-input" placeholder="">
+                <small *ngIf="signUpStatus==3 || signUpStatus==4 || signUpStatus==6" id="signup-confirmation-password-input-error-message" class="form-text text-danger">{{errorMessages[signUpStatus]}}</small>
+
+            </div>
+
+            <button (click)="onSignUpClick()" type="submit" class="btn btn-info col-12">Sign Up</button>
+
+        </div>
+    </form>
+
+</div>
