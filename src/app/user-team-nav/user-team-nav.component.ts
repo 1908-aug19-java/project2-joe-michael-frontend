@@ -15,11 +15,11 @@ export class UserTeamNavComponent implements OnInit {
 
     userEmitter;
 
+    expandedState = 0;
+    userFantasyTeams: string[] = ['Team 1', 'Team 2', 'Team 3'];
+
     ngOnInit() {
 
         this.userEmitter = this.userService.getUser().subscribe(item => this.user = item);
     }
-
-
-
 }
