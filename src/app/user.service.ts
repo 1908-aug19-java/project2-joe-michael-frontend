@@ -15,6 +15,8 @@ export class UserService {
     emailFilter: RegExp = /(\b[a-zA-Z0-9.-]{3,}\b)\@(\b[a-zA-Z]{1,}\b)\.(\b[a-zA-Z]{2,}\b)/g;
     passwordFilter: RegExp = /^[^ ]{1,}$/g;
 
+    user: User = JSON.parse(window.sessionStorage.getItem('user'));
+    loggedIn: boolean = window.sessionStorage.getItem('loggedIn') === 'true';
 
     temp1: User = {
         id: 1,
@@ -117,6 +119,7 @@ export class UserService {
     change(value) {
 
         window.sessionStorage.setItem('loggedIn', value);
+        this.loggedIn = value;
         this.loginEmitter.emit(value);
     }
 
@@ -128,11 +131,21 @@ export class UserService {
     sendUser(user) {
 
         window.sessionStorage.setItem('user', JSON.stringify(user));
+        this.user = user;
         this.userEmitter.emit(user);
     }
 
     getUser() {
 
         return this.userEmitter;
+    }
+
+    clean() {
+
+        this.loginEmitter.emit(false);
+        this.sendUser(null);
+
+        this.loggedIn = false;
+        this.user = null;
     }
 }

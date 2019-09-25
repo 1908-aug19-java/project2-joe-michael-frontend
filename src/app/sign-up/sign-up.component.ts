@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sign-up',
@@ -8,7 +9,7 @@ import { UserService } from '../user.service';
 })
 export class SignUpComponent implements OnInit {
 
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService, private router: Router) { }
 
     email = '';
     password = '';
@@ -33,5 +34,10 @@ export class SignUpComponent implements OnInit {
 
         this.signUpStatus = this.userService.signUp(this.email, this.password, this.confirmationPassword);
         console.log(this.signUpStatus);
+
+        if (this.signUpStatus === 1) {
+
+            this.router.navigate(['/user']);
+        }
     }
 }

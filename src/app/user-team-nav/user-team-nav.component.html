@@ -1,0 +1,86 @@
+<nav class="navbar navbar-light" aria-labelledby="general-naviagation" id="user-side-navbar">
+
+    <div class="navbar-header w-100 side-navbar-name">
+
+        <button *ngIf="user===null || user.firstname===''" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
+        Finish Account Creation
+        </button>
+
+        <a *ngIf="user!==null && user.firstname!==''" class="navbar-brand">
+        {{user.firstname + " " + user.lastname}}
+        </a>
+
+    </div>
+
+    <div class="navbar-collapse" id="navbarText">
+        <ul class="nav navbar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/user" routerLinkActive="active" id="navbar-home">Account Home</a>
+            </li>
+
+            <li class="nav-item">
+                <a (click)="expandedState===1?expandedState=0:expandedState=1" class="nav-link active" id="navbar-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===1}"></span>&nbsp;&nbsp;Fantasy Teams</a>
+            </li>
+
+            <ul *ngIf="expandedState===1" class="list-no-bullet">
+
+                <li *ngFor="let name of userFantasyTeams" class="nav-item">
+                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">{{name}}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">Create a new team...</a>
+                </li>
+
+            </ul>
+
+            <li class="nav-item">
+                <a (click)="expandedState===2?expandedState=0:expandedState=2" class="nav-link active" id="navbar-followed-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===2}"></span>&nbsp;&nbsp;Followed Teams</a>
+            </li>
+
+            <ul *ngIf="expandedState===2" class="list-no-bullet">
+
+                <li *ngFor="let team of userFollowedTeams" class="nav-item">
+                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">Follow a new team...</a>
+                </li>
+
+            </ul>
+
+            <li class="nav-item">
+                <a (click)="expandedState===3?expandedState=0:expandedState=3" class="nav-link active" id="navbar-followed-players-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===3}"></span>&nbsp;&nbsp;Followed Players</a>
+            </li>
+
+            <ul *ngIf="expandedState===3" class="list-no-bullet">
+
+                <li *ngFor="let player of userFollowedPlayers" class="nav-item">
+                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">{{player}}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">Follow a new player...</a>
+                </li>
+
+            </ul>
+
+            <li class="nav-divider"></li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/user/matches" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matches</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/user/predictions" routerLinkActive="active" id="navbar-user-predictions">Predictions</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/user/wagers" routerLinkActive="active" id="navbar-user-wagers">Wagers</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>

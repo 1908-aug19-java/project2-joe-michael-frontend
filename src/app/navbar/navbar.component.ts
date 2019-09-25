@@ -14,8 +14,8 @@ export class NavbarComponent implements OnInit {
 
   loginSub;
   userSub;
-  loginStatus: boolean = window.sessionStorage.getItem('loggedIn') === 'true';
-  user: User = JSON.parse(window.sessionStorage.getItem('user'));
+  loginStatus: boolean = this.userService.loggedIn;
+  user: User = this.userService.user;
 
   ngOnInit() {
 
@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit {
       window.sessionStorage.clear();
       this.userService.change(false);
       this.router.navigate(['/']);
+      this.userService.clean();
   }
 
 }

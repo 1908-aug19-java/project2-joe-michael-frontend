@@ -9,26 +9,95 @@ import { LoginComponent } from './login/login.component';
 import { NgModel, FormsModule } from '@angular/forms';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { LoginGuard } from './login.guard';
+import { NoLoginGuard } from './no-login.guard';
+import { UserTeamNavComponent } from './user-team-nav/user-team-nav.component';
+import { UserWagerComponent } from './user-wager/user-wager.component';
+import { UserPredictionsComponent } from './user-predictions/user-predictions.component';
+import { UserMatchesComponent } from './user-matches/user-matches.component';
+import { UserPageComponent } from './user-page/user-page.component';
+import { UserFantasyTeamsComponent } from './user-fantasy-teams/user-fantasy-teams.component';
+import { UserFollowedTeamsComponent } from './user-followed-teams/user-followed-teams.component';
+import { UserFollowedPlayersComponent } from './user-followed-players/user-followed-players.component';
 
 const appRoutes: Routes = [
 
     {
-        path: 'login', component: LoginComponent
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [NoLoginGuard]
     },
+
     {
-        path: 'user', component: UserHomeComponent
+        path: 'user',
+        component: UserPageComponent,
+        canActivate: [LoginGuard],
+        children: [
+
+            {
+                path: 'home',
+                component: UserHomeComponent
+            },
+
+            {
+                path: 'fantasy-teams',
+                component: UserFantasyTeamsComponent
+            },
+
+            {
+                path: 'followed-teams',
+                component: UserFollowedTeamsComponent
+            },
+
+            {
+                path: 'followed-players',
+                component: UserFollowedPlayersComponent
+            },
+
+            {
+                path: 'wagers',
+                component: UserWagerComponent
+            },
+
+            {
+                path: 'matches',
+                component: UserMatchesComponent
+            },
+
+            {
+                path: 'predictions',
+                component: UserPredictionsComponent
+            },
+
+            {
+                path: '**',
+                redirectTo: 'home'
+            }
+
+        ]
     },
+
     {
-        path: 'signup', component: SignUpComponent
+        path: 'signup',
+        component: SignUpComponent,
+        canActivate: [NoLoginGuard]
     },
+
     {
-        path: 'landing', component: LandingComponent
+        path: 'landing',
+        component: LandingComponent
     },
+
     {
-        path: '#', redirectTo: 'landing', pathMatch: 'full'
+        path: '#',
+        redirectTo: 'landing',
+        pathMatch: 'full'
     },
+
     {
-        path: '', redirectTo: 'landing', pathMatch: 'full'
+        path: '**',
+        redirectTo: 'landing',
+        pathMatch: 'full'
     }
 
 ];
@@ -41,6 +110,14 @@ const appRoutes: Routes = [
         UserHomeComponent,
         SignUpComponent,
         LandingComponent,
+        UserTeamNavComponent,
+        UserWagerComponent,
+        UserPredictionsComponent,
+        UserMatchesComponent,
+        UserPageComponent,
+        UserFantasyTeamsComponent,
+        UserFollowedTeamsComponent,
+        UserFollowedPlayersComponent,
     ],
     imports: [
         BrowserModule,
@@ -55,8 +132,13 @@ const appRoutes: Routes = [
             }
         )
     ],
-    providers: [],
+    providers: [
+        LoginGuard,
+        NoLoginGuard
+    ],
     bootstrap: [AppComponent]
 
 })
+
+
 export class AppModule { }

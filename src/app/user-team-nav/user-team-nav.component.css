@@ -1,0 +1,46 @@
+.navbar {
+
+    margin-top: 50px;
+}
+
+.side-navbar-name {
+
+    border-bottom: 1px solid black!important;
+}
+
+.side-navbar-finish-button {
+
+    margin-bottom: 10px;
+}
+
+.list-no-bullet {
+
+    list-style: none;
+}
+
+li { 
+
+    cursor: pointer;
+}
+
+.dropup {
+
+    transform: rotate(90deg);
+}
+
+.dropdown-toggle.dropup:after {
+
+    transform: rotate(180deg);
+}
+
+.dropdown-toggle:after {
+
+    transition: 0.3s;
+}
+
+.nav-divider {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black!important;
+}
