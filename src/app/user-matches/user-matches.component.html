@@ -1,3 +1,36 @@
-<p>
-  user-matches works!
-</p>
+<div class="text-center m-0 d-flex flex-column">
+        <h1 class = "display-4 text-dark">Upcoming Matches</h1>
+        <h4 class = "lead text-dark" id="landing-requests-user"></h4>
+</div>
+
+<div class="fixture-container text-center">
+
+    <div class="list-group" style="overflow-y: scroll!important;">
+
+        <div *ngFor="let fixture of fixtures.api.fixtures" class="list-group-item list-group-item-action col-10 offset-1">
+
+            <div class="lead float-left">
+
+                <img [src]="fixture.homeTeam.logo" class="img-thumbnail rounded float-left" alt="...">
+                <span>&nbsp;{{fixture.homeTeam.team_name}}</span>
+
+            </div>
+
+            <div class="text-center div-versus">
+                <p class="m-0">{{fixture.event_date | date:'mediumDate'}}</p>
+                <p class="m-0">{{(fixture.event_timestamp*1000) | date:'mediumTime'}}</p>
+                <p class="m-0">{{(fixture.venue?'@' + fixture.venue:'')}}</p>
+            </div>
+
+            <div class="lead float-right">
+
+                <img [src]="fixture.awayTeam.logo" class="img-thumbnail rounded float-right" alt="...">
+                <span>{{fixture.awayTeam.team_name}}&nbsp;</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

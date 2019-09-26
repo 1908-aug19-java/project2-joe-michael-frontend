@@ -1,4 +1,31 @@
-.placeholder{
+.list-group{
 
-    background-color:#F6F8FA;
+    max-height: 80vh;
+    margin-bottom: 10px;
+    overflow-y: scroll;
+}
+
+.list-group-item-active { 
+
+    cursor: pointer;
+}
+
+.img-thumbnail {
+
+    min-height: 64px;
+    max-height: 64px;
+    min-width: 64px;
+    max-width: 100px;
+    height: auto;
+    width: auto;
+}
+
+.div-versus {
+
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 150px);
+
+    height: 64px;
+    width: 300px;
 }
