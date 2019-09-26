@@ -22,6 +22,8 @@ import { UserFollowedPlayersComponent } from './user-followed-players/user-follo
 import { UserMatchComponent } from './user-match/user-match.component';
 import { TeamsComponent } from './teams/teams.component';
 import { TeamComponent } from './team/team.component';
+import { UserSearchComponent } from './user-search/user-search.component';
+import { MatchesFilterPipe } from './matches-filter.pipe';
 
 const appRoutes: Routes = [
 
@@ -139,6 +141,8 @@ const appRoutes: Routes = [
         UserMatchComponent,
         TeamsComponent,
         TeamComponent,
+        UserSearchComponent,
+        MatchesFilterPipe,
     ],
     imports: [
         BrowserModule,
