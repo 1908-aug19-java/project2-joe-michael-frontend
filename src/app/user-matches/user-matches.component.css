@@ -3,11 +3,13 @@
     max-height: 80vh;
     margin-bottom: 10px;
     overflow-y: scroll;
+    background: white!important;
 }
 
 .list-group-item-active { 
 
     cursor: pointer;
+    border: none;
 }
 
 .img-thumbnail {
@@ -23,9 +25,39 @@
 .div-versus {
 
     position: absolute;
-    top: calc(50% - 32px);
     left: calc(50% - 150px);
 
     height: 64px;
     width: 300px;
+}
+
+.list-group-item {
+
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    border: none;
+}
+
+.card-header {
+
+    border: none;
+}
+
+.card-body {
+
+    border-top: 1px solid #DFDFDF;
+
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+a {
+
+    color: inherit;
 }

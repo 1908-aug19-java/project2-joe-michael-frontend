@@ -1,0 +1,23 @@
+.home-team-container {
+
+    margin: 20px;
+    height: 30vh;
+}
+
+.away-team-container {
+
+    margin: 20px;
+    height: 30vh;
+}
+
+.combined-statistics-div {
+
+    height: 25vh;
+    margin: 20px;
+}
+
+.team-logo-image {
+
+    min-height: 128px;
+    min-width: 128px;
+}

@@ -19,6 +19,9 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { UserFantasyTeamsComponent } from './user-fantasy-teams/user-fantasy-teams.component';
 import { UserFollowedTeamsComponent } from './user-followed-teams/user-followed-teams.component';
 import { UserFollowedPlayersComponent } from './user-followed-players/user-followed-players.component';
+import { UserMatchComponent } from './user-match/user-match.component';
+import { TeamsComponent } from './teams/teams.component';
+import { TeamComponent } from './team/team.component';
 
 const appRoutes: Routes = [
 
@@ -26,6 +29,16 @@ const appRoutes: Routes = [
         path: 'login',
         component: LoginComponent,
         canActivate: [NoLoginGuard]
+    },
+
+    {
+        path: 'teams/:id',
+        component: TeamComponent
+    },
+
+    {
+        path: 'teams',
+        component: TeamsComponent
     },
 
     {
@@ -61,7 +74,12 @@ const appRoutes: Routes = [
 
             {
                 path: 'matches',
-                component: UserMatchesComponent
+                component: UserMatchesComponent,
+            },
+
+            {
+                path: 'matches/:id',
+                component: UserMatchComponent
             },
 
             {
@@ -118,6 +136,9 @@ const appRoutes: Routes = [
         UserFantasyTeamsComponent,
         UserFollowedTeamsComponent,
         UserFollowedPlayersComponent,
+        UserMatchComponent,
+        TeamsComponent,
+        TeamComponent,
     ],
     imports: [
         BrowserModule,
