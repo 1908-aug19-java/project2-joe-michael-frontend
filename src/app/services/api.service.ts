@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Seasons } from '../interfaces/seasons';
 import { Fixtures, Fixture } from '../interfaces/fixtures';
 
-// @ts-ignore
 import * as apiVar from './key';
 
 @Injectable({

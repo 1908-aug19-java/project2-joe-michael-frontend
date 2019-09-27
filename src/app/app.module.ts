@@ -1,18 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { NgModel, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LandingComponent } from './components/landing/landing.component';
-import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { NgModel, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-
 import { UserHomeComponent } from './components/user-home/user-home.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { LoginGuard } from './guards/login.guard';
-import { NoLoginGuard } from './guards/no-login.guard';
 import { UserTeamNavComponent } from './components/user-team-nav/user-team-nav.component';
 import { UserWagerComponent } from './components/user-wager/user-wager.component';
 import { UserPredictionsComponent } from './components/user-predictions/user-predictions.component';
@@ -25,8 +23,12 @@ import { UserMatchComponent } from './components/user-match/user-match.component
 import { TeamsComponent } from './components/teams/teams.component';
 import { TeamComponent } from './components/team/team.component';
 import { UserSearchComponent } from './components/user-search/user-search.component';
-import { MatchesFilterPipe } from './matches-filter.pipe';
+
+import { LoginGuard } from './guards/login.guard';
+import { NoLoginGuard } from './guards/no-login.guard';
 import { ApiGuard } from './guards/api.guard';
+
+import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
 
 const appRoutes: Routes = [
 

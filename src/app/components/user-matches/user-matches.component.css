@@ -25,10 +25,10 @@
 .div-versus {
 
     position: absolute;
-    left: calc(50% - 150px);
+    left: calc(50% - 250px);
 
     height: 64px;
-    width: 300px;
+    width: 500px;
 }
 
 .list-group-item {

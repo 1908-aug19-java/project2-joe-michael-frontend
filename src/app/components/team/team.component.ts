@@ -12,7 +12,7 @@ import { User } from '../../interfaces/user';
 })
 export class TeamComponent implements OnInit {
 
-  constructor(private userService: UserService, private api: ApiService) { }
+  constructor(private userService: UserService, private api: ApiService  ) { }
 
   loginSub;
   userSub;
