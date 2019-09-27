@@ -2,23 +2,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { NgModel, FormsModule } from '@angular/forms';
-import { UserHomeComponent } from './user-home/user-home.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
-import { LoginGuard } from './login.guard';
-import { NoLoginGuard } from './no-login.guard';
-import { UserTeamNavComponent } from './user-team-nav/user-team-nav.component';
-import { UserWagerComponent } from './user-wager/user-wager.component';
-import { UserPredictionsComponent } from './user-predictions/user-predictions.component';
-import { UserMatchesComponent } from './user-matches/user-matches.component';
-import { UserPageComponent } from './user-page/user-page.component';
-import { UserFantasyTeamsComponent } from './user-fantasy-teams/user-fantasy-teams.component';
-import { UserFollowedTeamsComponent } from './user-followed-teams/user-followed-teams.component';
-import { UserFollowedPlayersComponent } from './user-followed-players/user-followed-players.component';
+import { HttpClientModule } from '@angular/common/http';
+
+import { UserHomeComponent } from './components/user-home/user-home.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { LoginGuard } from './guards/login.guard';
+import { NoLoginGuard } from './guards/no-login.guard';
+import { UserTeamNavComponent } from './components/user-team-nav/user-team-nav.component';
+import { UserWagerComponent } from './components/user-wager/user-wager.component';
+import { UserPredictionsComponent } from './components/user-predictions/user-predictions.component';
+import { UserMatchesComponent } from './components/user-matches/user-matches.component';
+import { UserPageComponent } from './components/user-page/user-page.component';
+import { UserFantasyTeamsComponent } from './components/user-fantasy-teams/user-fantasy-teams.component';
+import { UserFollowedTeamsComponent } from './components/user-followed-teams/user-followed-teams.component';
+import { UserFollowedPlayersComponent } from './components/user-followed-players/user-followed-players.component';
+import { UserMatchComponent } from './components/user-match/user-match.component';
+import { TeamsComponent } from './components/teams/teams.component';
+import { TeamComponent } from './components/team/team.component';
+import { UserSearchComponent } from './components/user-search/user-search.component';
+import { MatchesFilterPipe } from './matches-filter.pipe';
+import { ApiGuard } from './guards/api.guard';
 
 const appRoutes: Routes = [
 
@@ -29,9 +37,20 @@ const appRoutes: Routes = [
     },
 
     {
+        path: 'teams/:id',
+        component: TeamComponent
+    },
+
+    {
+        path: 'teams',
+        component: TeamsComponent,
+        canActivate: [ApiGuard]
+    },
+
+    {
         path: 'user',
         component: UserPageComponent,
-        canActivate: [LoginGuard],
+        canActivate: [LoginGuard, ApiGuard],
         children: [
 
             {
@@ -61,7 +80,12 @@ const appRoutes: Routes = [
 
             {
                 path: 'matches',
-                component: UserMatchesComponent
+                component: UserMatchesComponent,
+            },
+
+            {
+                path: 'matches/:id',
+                component: UserMatchComponent
             },
 
             {
@@ -118,23 +142,30 @@ const appRoutes: Routes = [
         UserFantasyTeamsComponent,
         UserFollowedTeamsComponent,
         UserFollowedPlayersComponent,
+        UserMatchComponent,
+        TeamsComponent,
+        TeamComponent,
+        UserSearchComponent,
+        MatchesFilterPipe,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         FormsModule,
+        HttpClientModule,
         RouterModule.forRoot(
 
             appRoutes,
 
             {
-                enableTracing: true
+                enableTracing: false
             }
         )
     ],
     providers: [
         LoginGuard,
-        NoLoginGuard
+        NoLoginGuard,
+        ApiGuard
     ],
     bootstrap: [AppComponent]
 

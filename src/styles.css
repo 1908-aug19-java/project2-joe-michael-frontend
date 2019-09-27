@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+.info-div {
+
+    border-right: 1px solid #D1D5DA!important;
+    border-left: 1px solid #D1D5DA!important;
+    background-color: #F6F8FA!important;
+}
+
+.user-nav-col {
+
+    padding-right: 0px;
+}
