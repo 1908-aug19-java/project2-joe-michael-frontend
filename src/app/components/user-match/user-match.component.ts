@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Fixture, Fixtures } from '../fixtures';
-import { FixtureService } from '../fixture.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+
+import { FixtureService } from '../../services/fixture.service';
+
+import { Fixture, Fixtures } from '../../interfaces/fixtures';
 
 @Component({
   selector: 'app-user-match',

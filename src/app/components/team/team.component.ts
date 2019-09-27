@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
-import { User } from '../user';
+
+import { UserService } from '../../services/user.service';
+import { ApiService } from '../../services/api.service';
+
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-team',
@@ -9,7 +12,7 @@ import { User } from '../user';
 })
 export class TeamComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private api: ApiService) { }
 
   loginSub;
   userSub;
