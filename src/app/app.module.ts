@@ -22,11 +22,11 @@ import { UserFollowedPlayersComponent } from './components/user-followed-players
 import { UserMatchComponent } from './components/user-match/user-match.component';
 import { TeamsComponent } from './components/teams/teams.component';
 import { TeamComponent } from './components/team/team.component';
-import { UserSearchComponent } from './components/user-search/user-search.component';
 
 import { LoginGuard } from './guards/login.guard';
 import { NoLoginGuard } from './guards/no-login.guard';
 import { ApiGuard } from './guards/api.guard';
+import { TeamLoadGuard } from './guards/team-load.guard';
 
 import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
 
@@ -39,8 +39,12 @@ const appRoutes: Routes = [
     },
 
     {
-        path: 'teams/:id',
-        component: TeamComponent
+        path: 'teams/:league/:team',
+        component: TeamComponent,
+        canActivate: [TeamLoadGuard],
+        children: [
+
+        ]
     },
 
     {
@@ -129,6 +133,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
+
     declarations: [
         AppComponent,
         NavbarComponent,
@@ -147,9 +152,9 @@ const appRoutes: Routes = [
         UserMatchComponent,
         TeamsComponent,
         TeamComponent,
-        UserSearchComponent,
-        MatchesFilterPipe,
+        MatchesFilterPipe
     ],
+
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -164,11 +169,14 @@ const appRoutes: Routes = [
             }
         )
     ],
+
     providers: [
         LoginGuard,
         NoLoginGuard,
-        ApiGuard
+        ApiGuard,
+        TeamLoadGuard
     ],
+
     bootstrap: [AppComponent]
 
 })

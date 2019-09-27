@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { FixtureService } from '../../services/fixture.service';
 import { ApiService } from '../../services/api.service';
@@ -10,16 +10,23 @@ import { Fixture, Fixtures } from '../../interfaces/fixtures';
   templateUrl: './user-matches.component.html',
   styleUrls: ['./user-matches.component.css']
 })
-export class UserMatchesComponent implements OnInit {
+export class UserMatchesComponent implements OnInit, AfterViewInit {
 
   constructor(private fixtureService: FixtureService, private api: ApiService) { }
 
   fixtureSub;
-  fixtures: Fixtures = this.fixtureService.fixtures;
+  fixtureEmitter;
+  fixtures: Fixtures = this.api.fixtures;
 
   ngOnInit() {
 
-      this.fixtureSub = this.api.getFixtureEmitter().subscribe(item => this.fixtures = item);
+      this.fixtureEmitter = this.api.getFixtureEmitter();
+      this.fixtureSub = this.fixtureEmitter.subscribe(item => this.fixtures = item);
+  }
+
+  ngAfterViewInit() {
+
+      this.api.resendFixtures();
   }
 
 }

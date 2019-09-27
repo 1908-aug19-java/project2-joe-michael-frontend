@@ -1,14 +1,43 @@
 <div class="row">
-<div class="col-2 bg-light user-nav-col">
+    <div class="col-2 bg-light user-nav-col">
 
-    <app-user-team-nav *ngIf="loginStatus===true"></app-user-team-nav>
+        <app-user-team-nav *ngIf="loginStatus===true"></app-user-team-nav>
 
-</div>
+    </div>
 
-<div class="jumbotron jumbotron-fluid vh-100 col-8 p-0 info-div">
+    <div class="jumbotron jumbotron-fluid vh-100 col-10 p-0 info-div">
 
-    <p>Team Component</p>
-</div>
+        <div *ngIf="teamsEmitter | async as te" class="team-information-div">
 
-<div class="col-2 p-0 bg-light">
+            <div>
+
+                <img [src]="team.logo" class="team-logo-image img-thumbnail rounded float-left">
+
+                <div class="team-basic-information">
+                    <p class="display-4">{{team.name}}{{team.code?' (' + team.code + ')':''}}</p>
+                    <p *ngIf="team.country" class="lead">&nbsp;{{team.country}}: {{team.venue_city}}</p>
+                    <p *ngIf="team.founded" class="lead">&nbsp;Since {{team.founded}}</p>
+                </div>
+
+                <button class="btn btn-success" style="float: right;">Follow Team</button>
+
+            </div>
+        </div>
+
+        <div *ngIf="leaguesEmitter | async as le" class="team-season-information">
+
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link disabled lead text-dark">{{le.api.leagues[le.api.results - 1].name}}</a>
+                </li>
+
+                <li *ngFor="let l of le.api.leagues" class="nav-item">
+                    <a class="nav-link lead" (click)="onTabClick(l.league_id);" [ngClass]="{'active': activeId === l.league_id}">{{l.season}}</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
 </div>

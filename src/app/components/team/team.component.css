@@ -1,0 +1,34 @@
+.team-information-div {
+
+    margin: 20px;
+    min-height: 168px;
+}
+
+.team-logo-image {
+
+    min-height: 128px;
+    min-width: 128px;
+}
+
+.team-basic-information {
+
+    margin-left: 20px;
+    float: left;
+}
+
+.team-basic-information > .display-4 {
+
+    margin-bottom: 0px;
+}
+
+.team-basic-information > .lead {
+
+    margin-bottom: 0px;
+}
+
+.team-season-information {
+
+    top: 25vh;
+
+    margin: 20px;
+}

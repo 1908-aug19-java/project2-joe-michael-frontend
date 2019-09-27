@@ -3,7 +3,6 @@
     max-height: 80vh;
     margin-bottom: 10px;
     overflow-y: scroll;
-    background: white!important;
 }
 
 .list-group-item-active { 
