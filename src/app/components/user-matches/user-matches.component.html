@@ -17,7 +17,7 @@
 
                         <div class="lead float-left">
 
-                            <img [src]="fixture.homeTeam.logo" class="img-thumbnail rounded float-left" alt="...">
+                            <img [src]="fixture.homeTeam.logo" alt="..." class="img-thumbnail rounded float-left" alt="...">
                             <a routerLink="/teams/{{fixture.league_id}}/{{fixture.homeTeam.team_id}}" routerLinkActive="active">{{fixture.homeTeam.team_name}}</a>
 
                         </div>
@@ -30,7 +30,7 @@
 
                         <div class="lead float-right">
 
-                            <img [src]="fixture.awayTeam.logo" class="img-thumbnail rounded float-right" alt="...">
+                            <img [src]="fixture.awayTeam.logo" alt="..." class="img-thumbnail rounded float-right" alt="...">
                             <a routerLink="/teams/{{fixture.league_id}}/{{fixture.awayTeam.team_id}}" routerLinkActive="active">{{fixture.awayTeam.team_name}}</a>
 
                         </div>
