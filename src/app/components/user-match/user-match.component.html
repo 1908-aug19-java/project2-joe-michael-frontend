@@ -1,0 +1,22 @@
+<div class="fixture-container">
+
+    <div class="home-team-container">
+
+        <img [src]="fixture.homeTeam.logo" class="team-logo-image img-thumbnail rounded">
+        <a class="display-4">&nbsp;{{fixture.homeTeam.team_name}}</a>
+
+    </div>
+
+    <div class="combined-statistics-div text-center">
+
+        <a class="lead"> Combined Statistics </a>
+
+    </div>
+
+    <div class="away-team-container">
+
+        <img [src]="fixture.awayTeam.logo" class="team-logo-image img-thumbnail rounded">
+        <a class="display-4">&nbsp;{{fixture.awayTeam.team_name}}</a>
+
+    </div>
+</div>
