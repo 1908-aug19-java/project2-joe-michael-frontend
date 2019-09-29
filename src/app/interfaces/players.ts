@@ -1,28 +1,28 @@
-export interface Player {
+export interface Players {
     api: API;
 }
 
 export interface API {
     results: number;
-    players: PlayerElement[];
+    players: Player[];
 }
 
-export interface PlayerElement {
+export interface Player {
     player_id: number;
     player_name: string;
     firstname: string;
     lastname: string;
-    number: null;
-    position: string;
+    number: string;
+    position: Position;
     age: number;
     birth_date: string;
-    birth_place: string;
+    birth_place: null | string;
     birth_country: string;
     nationality: string;
-    height: string;
-    weight: string;
+    height: null | string;
+    weight: null | string;
     injured: null;
-    rating: null | string;
+    rating: null;
     team_id: number;
     team_name: string;
     league: string;
