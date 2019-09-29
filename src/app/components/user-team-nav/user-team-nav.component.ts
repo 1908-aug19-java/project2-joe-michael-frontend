@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../interfaces/user';
 
@@ -7,19 +7,17 @@ import { User } from '../../interfaces/user';
     templateUrl: './user-team-nav.component.html',
     styleUrls: ['./user-team-nav.component.css']
 })
-export class UserTeamNavComponent implements OnInit {
+export class UserTeamNavComponent implements OnInit, OnDestroy {
 
     constructor(private userService: UserService) { }
 
-    user: User = this.userService.user;
-
-    userEmitter;
-
-    expandedState = 0;
-    userFantasyTeams: string[] = ['Team 1', 'Team 2', 'Team 3'];
+    expandedState = +window.sessionStorage.getItem('expandedState');
 
     ngOnInit() {
+    }
 
-        this.userEmitter = this.userService.getUser().subscribe(item => this.user = item);
+    ngOnDestroy() {
+
+        window.sessionStorage.setItem('expandedState', this.expandedState.toString());
     }
 }

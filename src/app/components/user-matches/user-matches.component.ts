@@ -15,13 +15,11 @@ export class UserMatchesComponent implements OnInit, AfterViewInit {
   constructor(private fixtureService: FixtureService, private api: ApiService) { }
 
   fixtureSub;
-  fixtureEmitter;
   fixtures: Fixtures = this.api.fixtures;
 
   ngOnInit() {
 
-      this.fixtureEmitter = this.api.getFixtureEmitter();
-      this.fixtureSub = this.fixtureEmitter.subscribe(item => this.fixtures = item);
+      this.fixtureSub = this.api.fixturesEmitter.subscribe(item => this.fixtures = item);
   }
 
   ngAfterViewInit() {

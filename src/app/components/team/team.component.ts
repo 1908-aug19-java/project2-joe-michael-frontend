@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 import { ApiService } from '../../services/api.service';
@@ -6,6 +7,8 @@ import { ApiService } from '../../services/api.service';
 import { User } from '../../interfaces/user';
 import { Team, Teams } from '../../interfaces/team';
 import { League, Leagues } from '../../interfaces/leagues';
+import { SeasonStatistics, Statistics } from '../../interfaces/season-statistics';
+import { Players, Player } from '../../interfaces/players';
 
 @Component({
     selector: 'app-team',
@@ -15,10 +18,20 @@ import { League, Leagues } from '../../interfaces/leagues';
 
 export class TeamComponent implements OnInit, AfterViewInit {
 
-    constructor(private userService: UserService, private api: ApiService) { }
+    @Output() rosterEmitter: EventEmitter<Players> = new EventEmitter();
+
+    constructor(private userService: UserService, private api: ApiService, private router: Router) {
+
+        router.events.subscribe((e) => this.onRouteEvent(e));
+    }
+
+    loaded = false;
+    seasonCheck = false;
+    sorted = false;
 
     teamId: number = +window.sessionStorage.getItem('currentTeam');
     leagueId: number = +window.sessionStorage.getItem('currentLeague');
+    currentSeason = JSON.parse(window.sessionStorage.getItem('currentSeason'));
 
     loginSub;
     userSub;
@@ -28,54 +41,147 @@ export class TeamComponent implements OnInit, AfterViewInit {
     validationEmitter;
 
     teamsSub;
-    teamsEmitter;
-    team: Team = this.api.teams.api.teams[0];
-
     leaguesSub;
-    leaguesEmitter;
-    leagues: League[] = this.api.leagues.api.leagues;
+    seasonStatisticsSub;
+    playersSub;
 
     activeId: number;
 
+    test;
+
+    playerMap = {};
+    sortedPlayers: Player[] = [];
+
+    seasonMap = {};
+
+    teamsInit = false;
+    leaguesInit = false;
+
     ngOnInit() {
 
-        this.validationEmitter = this.api.getValidationEmitter();
+        this.loaded = false;
 
         this.loginSub = this.userService.getLoginStatus().subscribe((item: boolean) => this.loginStatus = item);
         this.userSub = this.userService.getUser().subscribe((item: User) => this.user = item);
 
-        this.teamsEmitter = this.api.getTeamsEmitter();
-        this.leaguesEmitter = this.api.getLeaguesEmitter();
+        this.leaguesSub = this.api.leaguesEmitter.subscribe((leagues: Leagues) => this.initLeagues(leagues));
+        this.playersSub = this.api.playersEmitter.subscribe((players: Players) => this.sortPlayers(players.api.players));
+        this.teamsSub = this.api.teamsEmitter.subscribe((teams: Teams) => this.initTeams(teams));
 
-        this.teamsSub = this.teamsEmitter.subscribe((teams: Teams) => this.team = teams.api.teams[0]);
-        this.leaguesSub = this.leaguesEmitter.subscribe((leagues: Leagues) => this.initLeagues(leagues));
     }
 
     ngAfterViewInit() {
 
-        if (this.team.team_id === this.teamId) {
+        if (this.api.teams !== null && this.api.teams.api.teams[0].team_id === this.teamId) {
 
             this.api.resendTeams();
         }
 
-        for (const league of this.leagues) {
+        if (this.api.leagues !== null) {
 
-            if (league.league_id === this.leagueId) {
+            for (const league of this.api.leagues.api.leagues) {
 
-                this.api.resendLeagues();
+                if (league.league_id === this.leagueId) {
+
+                    this.api.resendLeagues();
+                }
             }
+        }
+    }
+
+    onRouteEvent(event) {
+
+        if (event instanceof NavigationEnd) {
+
+            this.loaded = false;
+            this.seasonCheck = false;
+            this.sorted = false;
+            this.teamsInit = false;
+            this.leaguesInit = false;
         }
     }
 
     initLeagues(leagues: Leagues) {
 
-        this.leagues = leagues.api.leagues;
+        this.leaguesInit = true;
 
-        this.activeId = this.leagues[this.leagues.length - 1].league_id;
+        this.attemptInit(leagues);
+    }
+
+    initTeams(teams: Teams) {
+
+        this.teamsInit = true;
+        this.attemptInit(this.api.leagues);
+    }
+
+    attemptInit(leagues: Leagues) {
+
+        if (!this.loaded && this.teamsInit && this.leaguesInit) {
+
+            console.log(this.api.leagues);
+            console.log(this.api.teams);
+
+            for (let i = 0 ; i < leagues.api.leagues.length ; i++) {
+
+                this.seasonMap[leagues.api.leagues[i].league_id] = i;
+            }
+
+            const y = leagues.api.leagues[leagues.api.leagues.length - 1].season;
+
+            this.activeId = leagues.api.leagues[leagues.api.leagues.length - 1].league_id;
+            this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
+            this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
+
+            this.loaded = true;
+        }
     }
 
     onTabClick(id: number) {
 
-        this.activeId = id;
+        if (id !== this.activeId) {
+
+            console.log(this.api.leagues);
+            console.log(this.api.teams);
+
+            this.activeId = id;
+            this.sorted = false;
+
+            const y = this.api.leagues.api.leagues[this.seasonMap[this.activeId]].season;
+            this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
+            this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
+        }
+    }
+
+    sortPlayers(players: Player[]) {
+
+        if (!this.sorted && players.length === 0) {
+
+            this.api.getPlayersByTeamSeason(
+
+                this.api.leagues.api.leagues[this.seasonMap[this.activeId]].season.toString(), this.api.teams.api.teams[0].team_id
+            );
+
+            this.sorted = true;
+            return;
+        }
+
+        this.sortedPlayers = [];
+        this.playerMap = {};
+
+        let idx = 0;
+
+        for (const player of players) {
+
+            if (this.playerMap[player.player_id] == null) {
+
+                this.playerMap[player.player_id] = idx;
+                this.sortedPlayers.push(player);
+                idx++;
+            }
+
+        }
+
+        this.rosterEmitter.emit({api: {results: this.sortedPlayers.length, players: this.sortedPlayers}});
+        this.sorted = true;
     }
 }

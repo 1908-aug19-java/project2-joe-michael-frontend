@@ -7,24 +7,24 @@
 
     <div class="jumbotron jumbotron-fluid vh-100 col-10 p-0 info-div">
 
-        <div *ngIf="teamsEmitter | async as te" class="team-information-div">
+        <div *ngIf="api.teamsEmitter | async as te" class="team-information-div">
 
             <div>
 
-                <img [src]="team.logo" alt="..." class="team-logo-image img-thumbnail rounded float-left">
+                <img [src]="te.api.teams[0].logo" alt="..." class="team-logo-image img-thumbnail rounded float-left">
 
                 <div class="team-basic-information">
-                    <p class="display-4">{{team.name}}{{team.code?' (' + team.code + ')':''}}</p>
-                    <p *ngIf="team.country" class="lead">&nbsp;{{team.country}}: {{team.venue_city}}</p>
-                    <p *ngIf="team.founded" class="lead">&nbsp;Since {{team.founded}}</p>
+                    <p class="display-4">{{te.api.teams[0].name}}{{te.api.teams[0].code?' (' + te.api.teams[0].code + ')':''}}</p>
+                    <p *ngIf="te.api.teams[0].country" class="lead">&nbsp;{{te.api.teams[0].country}}: {{te.api.teams[0].venue_city}}</p>
+                    <p *ngIf="te.api.teams[0].founded" class="lead">&nbsp;Since {{te.api.teams[0].founded}}</p>
+                    <div class="follow-icon">
+                        <a (click)="userService.followTeam(te.api.teams[0], api.leagues)">&nbsp;&nbsp;<i class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(te.api.teams[0]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(te.api.teams[0])==-1}"></i></a>
+                    </div>
                 </div>
-
-                <button class="btn btn-success" style="float: right;">Follow Team</button>
-
             </div>
         </div>
 
-        <div *ngIf="leaguesEmitter | async as le" class="team-season-information">
+        <div *ngIf="api.leaguesEmitter | async as le" class="team-season-navtab">
 
             <ul class="nav nav-tabs">
 
@@ -38,6 +38,63 @@
 
             </ul>
 
+        </div>
+        <div class="row team-season-statistics">
+            <div *ngIf="api.seasonStatisticsEmitter | async as sse" class="col-3 stats-col">
+
+                <div>
+
+                    <p class="lead">{{sse.api.statistics.matchs.matchsPlayed.home}}</p>
+
+                </div>
+
+            </div>
+
+            <div *ngIf="rosterEmitter | async as re" class="roster-table col-9">
+
+                <table class="table table-striped p-0">
+                    <thead>
+                        <tr>
+                            <th class="roster-table-icon"></th>
+                            <th class="roster-table-icon"></th>
+                            <th class="roster-table-icon"></th>
+                            <th class="roster-table-name">Name</th>
+                            <th class="roster-table-position">Position</th>
+                            <th class="roster-table-position">Nationality</th>
+                            <th class="roster-table-number">Age</th>
+                            <th class="roster-table-icon"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let player of re.api.players">
+                            <td>
+                                <a (click)=userService.followPlayer(player)>
+                                    <i class="fa" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(player)!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(player)==-1}"></i>
+                                </a>
+                            </td>
+                            <td class="dropright">
+                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-list"></i>
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    <h6 class="dropdown-header">Add to fantasy team...</h6>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a *ngFor="let team of userService.tempFantasyTeams" class="dropdown-item">{{team}}</a>
+
+                                </div>
+                            </td>
+                            <td><i [ngClass]="{'fa fa-exclamation-circle': player.captain}"></i></td>
+                            <td>{{(player.firstname + ' ' + player.lastname)}}</td>
+                            <td>{{player.position}}</td>
+                            <td>{{player.nationality}}</td>
+                            <td>{{player.age}}</td>
+                            <td><a><i class="fa fa-external-link"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

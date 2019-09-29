@@ -6,6 +6,8 @@ import { Seasons } from '../interfaces/seasons';
 import { Fixtures, Fixture } from '../interfaces/fixtures';
 import { Teams, Team } from '../interfaces/team';
 import { League, Leagues } from '../interfaces/leagues';
+import { SeasonStatistics } from '../interfaces/season-statistics';
+import { Players, Player } from '../interfaces/players';
 
 import * as apiVar from './key';
 
@@ -23,6 +25,8 @@ export class ApiService {
     fixtures: Fixtures = JSON.parse(window.sessionStorage.getItem('fixtures'));
     teams: Teams = JSON.parse(window.sessionStorage.getItem('teams'));
     leagues: Leagues = JSON.parse(window.sessionStorage.getItem('leagues'));
+    seasonStatistics: SeasonStatistics = JSON.parse(window.sessionStorage.getItem('seasonStatistics'));
+    players: Players = JSON.parse(window.sessionStorage.getItem('players'));
 
     validationTeam: Teams;
     validationLeague: League;
@@ -31,8 +35,10 @@ export class ApiService {
 
     @Output() seasonsEmitter: EventEmitter<Seasons> = new EventEmitter();
     @Output() fixturesEmitter: EventEmitter<Fixtures> = new EventEmitter();
-    @Output() teamEmitter: EventEmitter<Teams> = new EventEmitter();
+    @Output() teamsEmitter: EventEmitter<Teams> = new EventEmitter();
     @Output() leaguesEmitter: EventEmitter<Leagues> = new EventEmitter();
+    @Output() seasonStatisticsEmitter: EventEmitter<SeasonStatistics> = new EventEmitter();
+    @Output() playersEmitter: EventEmitter<Players> = new EventEmitter();
 
     httpOptions = {
 
@@ -100,14 +106,7 @@ export class ApiService {
         this.seasonsEmitter.emit(seasons);
     }
 
-    getSeasonsEmitter() {
-
-        return this.seasonsEmitter;
-    }
-
     getFixturesByDate() {
-
-        console.log('getting fixtures');
 
         const requestUrl = `${this.url}/fixtures/date/${this.getNextDate()}`;
 
@@ -126,11 +125,6 @@ export class ApiService {
         this.setFixtures(this.fixtures);
     }
 
-    getFixtureEmitter() {
-
-        return this.fixturesEmitter;
-    }
-
     getTeamById(id: number) {
 
         const requestUrl = `${this.url}/teams/team/${id}`;
@@ -142,17 +136,12 @@ export class ApiService {
 
         window.sessionStorage.setItem('teams', JSON.stringify(teams));
         this.teams = teams;
-        this.teamEmitter.emit(teams);
+        this.teamsEmitter.emit(teams);
     }
 
     resendTeams() {
 
         this.setTeams(this.teams);
-    }
-
-    getTeamsEmitter() {
-
-        return this.teamEmitter;
     }
 
     getLeaguesById(id: number) {
@@ -163,7 +152,6 @@ export class ApiService {
     }
 
     setLeagues(leagues: Leagues) {
-
         window.sessionStorage.setItem('leagues', JSON.stringify(leagues));
         this.leagues = leagues;
         this.leaguesEmitter.emit(leagues);
@@ -174,8 +162,49 @@ export class ApiService {
         this.setLeagues(this.leagues);
     }
 
-    getLeaguesEmitter() {
+    getSeasonStatistics(league: number, team: number) {
 
-        return this.leaguesEmitter;
+        const requestUrl = `${this.url}/statistics/${league}/${team}`;
+
+        this.http.get<SeasonStatistics>(requestUrl, this.httpOptions).subscribe(
+
+            (stats: SeasonStatistics) => this.setSeasonStatistics(stats)
+        );
+
+        window.sessionStorage.setItem('currentSeason', JSON.stringify({league_id: league, team_id: team}));
     }
+
+    setSeasonStatistics(stats: SeasonStatistics) {
+
+        window.sessionStorage.setItem('seasonStatistics', JSON.stringify(stats));
+        this.seasonStatistics = stats;
+        this.seasonStatisticsEmitter.emit(stats);
+    }
+
+    resendSeasonStatistics() {
+
+        this.setSeasonStatistics(this.seasonStatistics);
+    }
+
+    getPlayersByTeamSeason(league: string, team: number) {
+
+        const requestUrl = `${this.url}/players/team/${team}/${league}`;
+
+        console.log(requestUrl);
+
+        this.http.get<Players>(requestUrl, this.httpOptions).subscribe((players: Players) => this.setPlayers(players));
+    }
+
+    setPlayers(players: Players) {
+
+        window.sessionStorage.setItem('players', JSON.stringify(players));
+        this.players = players;
+        this.playersEmitter.emit(players);
+    }
+
+    resendPlayers() {
+
+        this.setPlayers(this.players);
+    }
+
 }
