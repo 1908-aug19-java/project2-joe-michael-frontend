@@ -31,6 +31,7 @@ import { MatchFixtureGuard } from './guards/match-fixture.guard';
 
 import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
 import { RosterFilterPipe } from './pipes/roster-filter.pipe';
+import { PlayerComponent } from './components/player/player.component';
 
 const appRoutes: Routes = [
 
@@ -156,7 +157,8 @@ const appRoutes: Routes = [
         TeamsComponent,
         TeamComponent,
         MatchesFilterPipe,
-        RosterFilterPipe
+        RosterFilterPipe,
+        PlayerComponent
     ],
 
     imports: [
