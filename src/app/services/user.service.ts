@@ -48,7 +48,6 @@ export class UserService {
 
     followPlayer(player: Player) {
 
-        const id = player.player_id;
         const obj = {id: player.player_id, name: player.player_name};
         const idx = this.isPlayerFollowed(player);
 
@@ -66,7 +65,6 @@ export class UserService {
 
     followTeam(team: Team, leagues: Leagues) {
 
-        const id = team.team_id;
         const obj = {team, league: leagues.api.leagues[0].league_id};
         const idx = this.isTeamFollowed(team);
 
