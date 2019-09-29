@@ -17,7 +17,7 @@ export class UserMatchComponent implements OnInit, AfterViewInit {
     constructor(public api: ApiService,
                 private route: ActivatedRoute,
                 private location: Location) { }
-    
+
     matchFixtures;
     matchFixtureSub;
 
@@ -28,6 +28,6 @@ export class UserMatchComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
 
-        this.api.resendMatchFixture();)
+        this.api.resendMatchFixture();
     }
 }
