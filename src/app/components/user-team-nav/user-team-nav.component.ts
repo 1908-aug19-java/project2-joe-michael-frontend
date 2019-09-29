@@ -9,7 +9,7 @@ import { User } from '../../interfaces/user';
 })
 export class UserTeamNavComponent implements OnInit, OnDestroy {
 
-    constructor(private userService: UserService) { }
+    constructor(public userService: UserService) { }
 
     expandedState = +window.sessionStorage.getItem('expandedState');
 

@@ -20,7 +20,7 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
     @Output() rosterEmitter: EventEmitter<Players> = new EventEmitter();
 
-    constructor(private userService: UserService, private api: ApiService, private router: Router) {
+    constructor(public userService: UserService, public api: ApiService, public router: Router) {
 
         router.events.subscribe((e) => this.onRouteEvent(e));
     }
