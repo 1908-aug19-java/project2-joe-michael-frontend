@@ -18,7 +18,7 @@
                     <p *ngIf="te.api.teams[0].country" class="lead">&nbsp;{{te.api.teams[0].country}}: {{te.api.teams[0].venue_city}}</p>
                     <p *ngIf="te.api.teams[0].founded" class="lead">&nbsp;Since {{te.api.teams[0].founded}}</p>
                     <div class="follow-icon">
-                        <a (click)="userService.followTeam(te.api.teams[0], api.leagues)">&nbsp;&nbsp;<i class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(te.api.teams[0]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(te.api.teams[0])==-1}"></i></a>
+                        <a (click)="userService.followTeam(te.api.teams[0], api.leagues)">&nbsp;&nbsp;<em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(te.api.teams[0]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(te.api.teams[0])==-1}"></em></a>
                     </div>
                 </div>
             </div>
@@ -52,29 +52,29 @@
 
             <div *ngIf="rosterEmitter | async as re" class="roster-table col-9">
 
-                <table class="table table-striped p-0">
+                <table class="table table-striped p-0" aria-describedby="Season Roster">
                     <thead>
                         <tr>
-                            <th class="roster-table-icon"></th>
-                            <th class="roster-table-icon"></th>
-                            <th class="roster-table-icon"></th>
-                            <th class="roster-table-name">Name</th>
-                            <th class="roster-table-position">Position</th>
-                            <th class="roster-table-position">Nationality</th>
-                            <th class="roster-table-number">Age</th>
-                            <th class="roster-table-icon"></th>
+                            <th scope="col" class="roster-table-icon"></th>
+                            <th scope="col" class="roster-table-icon"></th>
+                            <th scope="col" class="roster-table-icon"></th>
+                            <th scope="col" class="roster-table-name">Name</th>
+                            <th scope="col" class="roster-table-position">Position</th>
+                            <th scope="col" class="roster-table-position">Nationality</th>
+                            <th scope="col" class="roster-table-number">Age</th>
+                            <th scope="col" class="roster-table-icon"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let player of re.api.players">
                             <td>
                                 <a (click)=userService.followPlayer(player)>
-                                    <i class="fa" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(player)!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(player)==-1}"></i>
+                                    <em class="fa" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(player)!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(player)==-1}"></em>
                                 </a>
                             </td>
                             <td class="dropright">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-list"></i>
+                                    <em class="fa fa-list"></em>
                                 </a>
 
                                 <div class="dropdown-menu">
@@ -85,12 +85,12 @@
 
                                 </div>
                             </td>
-                            <td><i [ngClass]="{'fa fa-exclamation-circle': player.captain}"></i></td>
+                            <td><em [ngClass]="{'fa fa-exclamation-circle': player.captain}"></em></td>
                             <td>{{(player.firstname + ' ' + player.lastname)}}</td>
                             <td>{{player.position}}</td>
                             <td>{{player.nationality}}</td>
                             <td>{{player.age}}</td>
-                            <td><a><i class="fa fa-external-link"></i></a></td>
+                            <td><a><em class="fa fa-external-link"></em></a></td>
                         </tr>
                     </tbody>
                 </table>
