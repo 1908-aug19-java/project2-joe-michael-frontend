@@ -17,9 +17,9 @@ import * as apiVar from './key';
 
 export class ApiService {
 
-    key = apiVar.key || '';
-    host = apiVar.host || '';
-    url = apiVar.url || '';
+    key = apiVar.apiKey || '';
+    host = apiVar.apiHost || '';
+    url = apiVar.apiUrl || '';
 
     seasons: Seasons = JSON.parse(window.sessionStorage.getItem('seasons'));
     fixtures: Fixtures = JSON.parse(window.sessionStorage.getItem('fixtures'));
@@ -27,6 +27,8 @@ export class ApiService {
     leagues: Leagues = JSON.parse(window.sessionStorage.getItem('leagues'));
     seasonStatistics: SeasonStatistics = JSON.parse(window.sessionStorage.getItem('seasonStatistics'));
     players: Players = JSON.parse(window.sessionStorage.getItem('players'));
+    teamFixtures: Fixtures = JSON.parse(window.sessionStorage.getItem('teamFixtures'));
+    matchFixture: Fixtures = JSON.parse(window.sessionStorage.getItem('matchFixture'));
 
     validationTeam: Teams;
     validationLeague: League;
@@ -39,6 +41,8 @@ export class ApiService {
     @Output() leaguesEmitter: EventEmitter<Leagues> = new EventEmitter();
     @Output() seasonStatisticsEmitter: EventEmitter<SeasonStatistics> = new EventEmitter();
     @Output() playersEmitter: EventEmitter<Players> = new EventEmitter();
+    @Output() teamFixturesEmitter: EventEmitter<Fixtures> = new EventEmitter();
+    @Output() matchFixtureEmitter: EventEmitter<Fixtures> = new EventEmitter();
 
     httpOptions = {
 
@@ -190,8 +194,6 @@ export class ApiService {
 
         const requestUrl = `${this.url}/players/team/${team}/${league}`;
 
-        console.log(requestUrl);
-
         this.http.get<Players>(requestUrl, this.httpOptions).subscribe((players: Players) => this.setPlayers(players));
     }
 
@@ -207,4 +209,41 @@ export class ApiService {
         this.setPlayers(this.players);
     }
 
+    getTeamFixturesBySeason(season: number, team: number) {
+
+        const requestUrl = `${this.url}/fixtures/team/${team}/${season}`;
+
+        this.http.get<Fixtures>(requestUrl, this.httpOptions).subscribe((fixtures: Fixtures) => this.setTeamFixtures(fixtures));
+    }
+
+    setTeamFixtures(fixtures: Fixtures) {
+
+        window.sessionStorage.setItem('teamFixtures', JSON.stringify(fixtures));
+        this.teamFixtures = fixtures;
+        this.teamFixturesEmitter.emit(fixtures);
+    }
+
+    resendTeamFixtures() {
+
+        this.setTeamFixtures(this.teamFixtures);
+    }
+
+    getFixtureById(id: number) {
+
+        const requestUrl = `${this.url}/fixtures/id/${id}`;
+
+        this.http.get<Fixtures>(requestUrl, this.httpOptions).subscribe((fixtures: Fixtures) => this.setMatchFixture(fixtures));
+    }
+
+    setMatchFixture(fixtures: Fixtures) {
+
+        window.sessionStorage.setItem('matchFixture', JSON.stringify(fixtures));
+        this.matchFixture = fixtures;
+        this.matchFixtureEmitter.emit(fixtures);
+    }
+
+    resendMatchFixture() {
+
+        this.setMatchFixture(this.matchFixture);
+    }
 }

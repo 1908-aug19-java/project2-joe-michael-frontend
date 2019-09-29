@@ -42,9 +42,57 @@
         <div class="row team-season-statistics">
             <div *ngIf="api.seasonStatisticsEmitter | async as sse" class="col-3 stats-col">
 
-                <div>
+                <div class="matchs-text-container">
 
-                    <p class="lead">{{sse.api.statistics.matchs.matchsPlayed.home}}</p>
+                    <p class="lead m-0">Matchs - 
+                        <span>{{sse.api.statistics.matchs.matchsPlayed.total}}</span>
+                         - (
+                        <span>{{sse.api.statistics.matchs.wins.total}}</span>
+                         | 
+                        <span>{{sse.api.statistics.matchs.loses.total}}</span>
+                         | 
+                        <span>{{sse.api.statistics.matchs.draws.total}}</span>
+                        )
+                    </p>
+
+                </div>
+
+                <hr />
+
+                <div class="upcoming-matchs-container">
+
+                    <div class="m-0 match-nav-tabs">
+
+                        <ul class="nav nav-tabs">
+
+                            <li class="nav-item">
+                                <a class="nav-link lead text-dark" (click)="matchsFilterOption=0;" [ngClass]="{'active': matchsFilterOption==0}">All</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link lead text-dark" (click)="matchsFilterOption=1;" [ngClass]="{'active': matchsFilterOption==1}">Completed</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link lead" (click)="matchsFilterOption=2;" [ngClass]="{'active': matchsFilterOption==2, 'disabled nav-text text-muted': !api.leagues.api.leagues[this.seasonMap[this.activeId]].is_current, 'nav-link text-dark': api.leagues.api.leagues[this.seasonMap[this.activeId]]}">Upcoming</a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                    <ul class="list-group match-list-group">
+                        
+                        <li *ngFor="let fixture of sortedFixturesEmitter | async | matchesFilter:matchsFilterOption" class="list-group-item list-group-item-active">
+
+                            <a routerLink="/user/matchs/{{fixture.fixture_id}}" routerLinkActive="active">
+                                <p class="lead m-0 float-left">{{fixture.round}}</p>
+                                <p class="lead m-0 float-right">{{((fixture.statusShort==='FT')?fixture.score.fulltime:'')}}</p>
+                            </a>
+
+                        </li>
+
+                    </ul>
 
                 </div>
 
@@ -57,16 +105,16 @@
                         <tr>
                             <th scope="col" class="roster-table-icon"></th>
                             <th scope="col" class="roster-table-icon"></th>
-                            <th scope="col" class="roster-table-icon"></th>
-                            <th scope="col" class="roster-table-name">Name</th>
-                            <th scope="col" class="roster-table-position">Position</th>
-                            <th scope="col" class="roster-table-position">Nationality</th>
-                            <th scope="col" class="roster-table-number">Age</th>
+                            <th scope="col" class="roster-table-icon"><a (click)="rosterSortOption=0"><em class="fa fa-exclamation-circle"></em></a></th>
+                            <th scope="col" class="roster-table-name"><a (click)="rosterSortOption=1">Name</a></th>
+                            <th scope="col" class="roster-table-position"><a (click)="rosterSortOption=2">Position</a></th>
+                            <th scope="col" class="roster-table-position"><a  (click)="rosterSortOption=3">Nationality</a></th>
+                            <th scope="col" class="roster-table-number"><a (click)="rosterSortOption=4">Age</a></th>
                             <th scope="col" class="roster-table-icon"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let player of re.api.players">
+                        <tr *ngFor="let player of re.api.players | rosterFilter:rosterSortOption">
                             <td>
                                 <a (click)=userService.followPlayer(player)>
                                     <em class="fa" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(player)!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(player)==-1}"></em>
@@ -89,7 +137,7 @@
                             <td>{{(player.firstname + ' ' + player.lastname)}}</td>
                             <td>{{player.position}}</td>
                             <td>{{player.nationality}}</td>
-                            <td>{{player.age}}</td>
+                            <td>{{(player.age?player.age:'')}}</td>
                             <td><a><em class="fa fa-external-link"></em></a></td>
                         </tr>
                     </tbody>

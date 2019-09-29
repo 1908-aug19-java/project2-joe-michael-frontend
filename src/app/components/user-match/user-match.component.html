@@ -1,9 +1,9 @@
-<div class="fixture-container">
+<div *ngIf="api.matchFixtureEmitter | async as mfe"class="fixture-container">
 
     <div class="home-team-container">
 
-        <img [src]="fixture.homeTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
-        <a class="display-4">&nbsp;{{fixture.homeTeam.team_name}}</a>
+        <img [src]="mfe.api.fixtures[0].homeTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
+        <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].league_id}}/{{mfe.api.fixtures[0].homeTeam.team_id}}" routerLinkActive="active">&nbsp;{{mfe.api.fixtures[0].homeTeam.team_name}}</a>
 
     </div>
 
@@ -15,8 +15,8 @@
 
     <div class="away-team-container">
 
-        <img [src]="fixture.awayTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
-        <a class="display-4">&nbsp;{{fixture.awayTeam.team_name}}</a>
+        <img [src]="mfe.api.fixtures[0].awayTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
+        <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].league_id}}/{{mfe.api.fixtures[0].awayTeam.team_id}}" routerLinkActive="active">&nbsp;{{mfe.api.fixtures[0].awayTeam.team_name}}</a>
 
     </div>
 </div>

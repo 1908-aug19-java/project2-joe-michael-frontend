@@ -99,9 +99,37 @@
 a {
 
     cursor: pointer;
+    color: inherit;
 }
 
 .follow-icon {
 
     margin-top: 3px;
+}
+
+.matchs-text-container {
+
+    margin: 10px;
+}
+
+.upcoming-matchs-container {
+
+    overflow-y: hidden;
+}
+
+.list-group {
+
+    max-height: 40vh;
+    margin-bottom: 10px;
+    overflow-y: auto;
+}
+
+.match-nav-tabs > ul > li > a {
+
+    font-size: 0.9vw!important;
+}
+
+.match-list-group > ul > li {
+
+    cursor: pointer;
 }

@@ -14,7 +14,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserTeamNavComponent } from './components/user-team-nav/user-team-nav.component';
 import { UserWagerComponent } from './components/user-wager/user-wager.component';
 import { UserPredictionsComponent } from './components/user-predictions/user-predictions.component';
-import { UserMatchesComponent } from './components/user-matches/user-matches.component';
+import { UserMatchsComponent } from './components/user-matchs/user-matchs.component';
 import { UserPageComponent } from './components/user-page/user-page.component';
 import { UserFantasyTeamsComponent } from './components/user-fantasy-teams/user-fantasy-teams.component';
 import { UserFollowedTeamsComponent } from './components/user-followed-teams/user-followed-teams.component';
@@ -27,8 +27,10 @@ import { LoginGuard } from './guards/login.guard';
 import { NoLoginGuard } from './guards/no-login.guard';
 import { ApiGuard } from './guards/api.guard';
 import { TeamLoadGuard } from './guards/team-load.guard';
+import { MatchFixtureGuard } from './guards/match-fixture.guard';
 
 import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
+import { RosterFilterPipe } from './pipes/roster-filter.pipe';
 
 const appRoutes: Routes = [
 
@@ -85,13 +87,14 @@ const appRoutes: Routes = [
             },
 
             {
-                path: 'matches',
-                component: UserMatchesComponent,
+                path: 'matchs',
+                component: UserMatchsComponent,
             },
 
             {
-                path: 'matches/:id',
-                component: UserMatchComponent
+                path: 'matchs/:id',
+                component: UserMatchComponent,
+                canActivate: [MatchFixtureGuard]
             },
 
             {
@@ -144,7 +147,7 @@ const appRoutes: Routes = [
         UserTeamNavComponent,
         UserWagerComponent,
         UserPredictionsComponent,
-        UserMatchesComponent,
+        UserMatchsComponent,
         UserPageComponent,
         UserFantasyTeamsComponent,
         UserFollowedTeamsComponent,
@@ -152,7 +155,8 @@ const appRoutes: Routes = [
         UserMatchComponent,
         TeamsComponent,
         TeamComponent,
-        MatchesFilterPipe
+        MatchesFilterPipe,
+        RosterFilterPipe
     ],
 
     imports: [
@@ -174,7 +178,8 @@ const appRoutes: Routes = [
         LoginGuard,
         NoLoginGuard,
         ApiGuard,
-        TeamLoadGuard
+        TeamLoadGuard,
+        MatchFixtureGuard
     ],
 
     bootstrap: [AppComponent]

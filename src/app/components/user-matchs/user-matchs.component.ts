@@ -7,10 +7,10 @@ import { Fixture, Fixtures } from '../../interfaces/fixtures';
 
 @Component({
   selector: 'app-user-matches',
-  templateUrl: './user-matches.component.html',
-  styleUrls: ['./user-matches.component.css']
+  templateUrl: './user-matchs.component.html',
+  styleUrls: ['./user-matchs.component.css']
 })
-export class UserMatchesComponent implements OnInit, AfterViewInit {
+export class UserMatchsComponent implements OnInit, AfterViewInit {
 
   constructor(private fixtureService: FixtureService, private api: ApiService) { }
 
