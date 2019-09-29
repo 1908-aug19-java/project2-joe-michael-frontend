@@ -3,12 +3,11 @@
         <h4 class = "lead text-dark" id="landing-requests-user"></h4>
 </div>
 
-<div class="fixture-container text-center">
+<div *ngIf="fixtures" class="fixture-container text-center">
 
     <div class="list-group" style="overflow-y: scroll!important;" id="fixture-list">
 
-        <div *ngFor="let fixture of fixtures.api.fixtures" class="card col-10 offset-1 p-0">
-            <!-- routerLink="/user/match/{{fixture.fixture_id}}" routerLinkActive="active" -->
+        <div *ngFor="let fixture of api.fixtures.api.fixtures" class="card col-10 offset-1 p-0">
 
             <a attr.data-target="#collapse-{{fixture.fixture_id}}" data-toggle="collapse" class="collapsed" aria-expanded="false">
 
@@ -18,8 +17,8 @@
 
                         <div class="lead float-left">
 
-                            <img [src]="fixture.homeTeam.logo" class="img-thumbnail rounded float-left" alt="...">
-                            <a routerLink="/teams/{{fixture.awayTeam.team_id}}" routerLinkActive="active">&nbsp;{{fixture.homeTeam.team_name}}</a>
+                            <img [src]="fixture.homeTeam.logo" alt="..." class="img-thumbnail rounded float-left" alt="...">
+                            <a routerLink="/teams/{{fixture.league_id}}/{{fixture.homeTeam.team_id}}" routerLinkActive="active">{{fixture.homeTeam.team_name}}</a>
 
                         </div>
 
@@ -31,8 +30,8 @@
 
                         <div class="lead float-right">
 
-                            <img [src]="fixture.awayTeam.logo" class="img-thumbnail rounded float-right" alt="...">
-                            <a routerLink="/teams/{{fixture.awayTeam.team_id}}" routerLinkActive="active">{{fixture.awayTeam.team_name}}&nbsp;</a>
+                            <img [src]="fixture.awayTeam.logo" alt="..." class="img-thumbnail rounded float-right" alt="...">
+                            <a routerLink="/teams/{{fixture.league_id}}/{{fixture.awayTeam.team_id}}" routerLinkActive="active">{{fixture.awayTeam.team_name}}</a>
 
                         </div>
                     </div>

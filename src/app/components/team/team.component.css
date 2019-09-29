@@ -1,0 +1,107 @@
+.team-information-div {
+
+    margin: 20px;
+    margin-right: 50px;
+    min-height: 168px;
+}
+
+.team-logo-image {
+
+    min-height: 128px;
+    min-width: 128px;
+}
+
+.team-basic-information {
+
+    margin-left: 20px;
+    margin-right: 50px;
+    float: left;
+}
+
+.team-basic-information > .display-4 {
+
+    margin-bottom: 0px;
+}
+
+.team-basic-information > .lead {
+
+    margin-bottom: 0px;
+}
+
+.team-season-navtab {
+
+    top: 25vh;
+    margin: 20px;
+    margin-right: 50px;
+}
+
+.team-season-statistics {
+
+    margin: 0px;
+    margin-left: 20px;
+    margin-right: 50px;
+}
+
+.team-season-roster {
+
+    margin-right: 50px;
+}
+
+.roster-table {
+
+    min-height: 57vh;
+    max-height: 57vh;
+    overflow-y: scroll;
+
+}
+
+.roster-table-icon {
+
+    width: 1%;
+}
+
+.roster-table-name {
+
+    width: 18%;
+}
+
+.roster-table-position {
+
+    width: 12%;
+}
+
+.roster-table-number {
+
+    width: 5%;
+}
+
+.table {
+
+    border: 1px solid #DEE2E6!important;
+}
+
+.stats-col {
+
+    min-height: 57vh;
+    max-height: 57vh;
+    border: 1px solid #DEE2E6!important;
+}
+
+.table thead th {
+
+    position: sticky;
+    top: 0;
+    background-color: white;
+    border-collapse: separate;
+    z-index: 5;
+}
+
+a {
+
+    cursor: pointer;
+}
+
+.follow-icon {
+
+    margin-top: 3px;
+}

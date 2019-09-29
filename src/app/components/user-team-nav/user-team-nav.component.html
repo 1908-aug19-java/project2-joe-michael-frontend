@@ -2,12 +2,12 @@
 
     <div class="navbar-header w-100 side-navbar-name">
 
-        <button *ngIf="user===null || user.firstname===''" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
+        <button *ngIf="userService.user===null || userService.user.firstname===''" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
         Finish Account Creation
         </button>
 
-        <a *ngIf="user!==null && user.firstname!==''" class="navbar-brand">
-        {{user.firstname + " " + user.lastname}}
+        <a *ngIf="userService.user!==null && userService.user.firstname!==''" class="navbar-brand">
+        {{userService.user.firstname + " " + userService.user.lastname}}
         </a>
 
     </div>
@@ -25,12 +25,14 @@
 
             <ul *ngIf="expandedState===1" class="list-no-bullet">
 
-                <li *ngFor="let name of userFantasyTeams" class="nav-item">
-                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">{{name}}</a>
+                <li *ngFor="let team of userService.tempFantasyTeams" class="nav-item">
+                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
                 </li>
 
+                <hr />
+
                 <li class="nav-item">
-                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">Create a new team...</a>
+                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" class="nav-link p-0">Create a new team...</a>
                 </li>
 
             </ul>
@@ -41,12 +43,8 @@
 
             <ul *ngIf="expandedState===2" class="list-no-bullet">
 
-                <li *ngFor="let team of userFollowedTeams" class="nav-item">
-                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">Follow a new team...</a>
+                <li *ngFor="let obj of userService.tempFollowedTeams" class="nav-item">
+                    <a routerLink="/teams/{{obj.league}}/{{obj.team.team_id}}" routerLinkActive="active" class="nav-link p-0">{{obj.team.name}}</a>
                 </li>
 
             </ul>
@@ -57,12 +55,8 @@
 
             <ul *ngIf="expandedState===3" class="list-no-bullet">
 
-                <li *ngFor="let player of userFollowedPlayers" class="nav-item">
-                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">{{player}}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">Follow a new player...</a>
+                <li *ngFor="let player of userService.tempFollowedPlayers" class="nav-item">
+                    <a routerLink="/user/followed-players" routerLinkActive="active" class="nav-link p-0">{{player.name}}</a>
                 </li>
 
             </ul>

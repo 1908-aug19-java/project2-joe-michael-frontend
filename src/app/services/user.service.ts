@@ -1,6 +1,9 @@
 import { Injectable, Input, Output, EventEmitter } from '@angular/core';
 
 import { User } from '../interfaces/user';
+import { Players, Player } from '../interfaces/players';
+import { Teams, Team } from '../interfaces/team';
+import { Leagues, League } from '../interfaces/leagues';
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +42,70 @@ export class UserService {
         level: 1
     };
 
+    tempFantasyTeams = ['t1', 'yml1', 'yes'];
+    tempFollowedTeams: {team: Team, league: number}[] = JSON.parse(window.sessionStorage.getItem('followedTeams')) || [];
+    tempFollowedPlayers: {id: number, name: string}[] = JSON.parse(window.sessionStorage.getItem('followedPlayers')) || [];
 
+    followPlayer(player: Player) {
+
+        const id = player.player_id;
+        const obj = {id: player.player_id, name: player.player_name};
+        const idx = this.isPlayerFollowed(player);
+
+        if (idx !== -1) {
+
+
+            this.tempFollowedPlayers.splice(idx, 1);
+        } else {
+
+            this.tempFollowedPlayers.push(obj);
+        }
+
+        window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.tempFollowedPlayers));
+    }
+
+    followTeam(team: Team, leagues: Leagues) {
+
+        const id = team.team_id;
+        const obj = {team, league: leagues.api.leagues[0].league_id};
+        const idx = this.isTeamFollowed(team);
+
+        if (idx !== -1) {
+
+            this.tempFollowedTeams.splice(idx, 1);
+        } else {
+
+            this.tempFollowedTeams.push(obj);
+        }
+
+        window.sessionStorage.setItem('followedTeams', JSON.stringify(this.tempFollowedTeams));
+    }
+
+    isPlayerFollowed(player: Player): number {
+
+        for (const obj of this.tempFollowedPlayers) {
+
+            if (obj.id === player.player_id) {
+
+                return this.tempFollowedPlayers.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
+    isTeamFollowed(team: Team): number {
+
+        for (const obj of this.tempFollowedTeams) {
+
+            if (obj.team.team_id === team.team_id) {
+
+                return this.tempFollowedTeams.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
 
     // Status Codes
     // 0 - Null
