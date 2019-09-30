@@ -29,6 +29,7 @@ export class ApiService {
     players: Players = JSON.parse(window.sessionStorage.getItem('players'));
     teamFixtures: Fixtures = JSON.parse(window.sessionStorage.getItem('teamFixtures'));
     matchFixture: Fixtures = JSON.parse(window.sessionStorage.getItem('matchFixture'));
+    player: Players = JSON.parse(window.sessionStorage.getItem('player'));
 
     validationTeam: Teams;
     validationLeague: League;
@@ -43,6 +44,7 @@ export class ApiService {
     @Output() playersEmitter: EventEmitter<Players> = new EventEmitter();
     @Output() teamFixturesEmitter: EventEmitter<Fixtures> = new EventEmitter();
     @Output() matchFixtureEmitter: EventEmitter<Fixtures> = new EventEmitter();
+    @Output() playerEmitter: EventEmitter<Players> = new EventEmitter();
 
     httpOptions = {
 
@@ -245,5 +247,24 @@ export class ApiService {
     resendMatchFixture() {
 
         this.setMatchFixture(this.matchFixture);
+    }
+
+    getPlayerById(id: number) {
+
+        const requestUrl = `${this.url}/players/player/${id}`;
+
+        this.http.get<Players>(requestUrl, this.httpOptions).subscribe((players: Players) => this.setPlayer(players));
+    }
+
+    setPlayer(players: Players) {
+
+        window.sessionStorage.setItem('player', JSON.stringify(players));
+        this.player = players;
+        this.playerEmitter.emit(players);
+    }
+
+    resendPlayer() {
+
+        this.setPlayer(this.player);
     }
 }

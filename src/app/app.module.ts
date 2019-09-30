@@ -27,6 +27,7 @@ import { NoLoginGuard } from './guards/no-login.guard';
 import { ApiGuard } from './guards/api.guard';
 import { TeamLoadGuard } from './guards/team-load.guard';
 import { MatchFixtureGuard } from './guards/match-fixture.guard';
+import { PlayerLoadGuard } from './guards/player-load.guard';
 
 import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
 import { RosterFilterPipe } from './pipes/roster-filter.pipe';
@@ -44,9 +45,12 @@ const appRoutes: Routes = [
         path: 'teams/:league/:team',
         component: TeamComponent,
         canActivate: [TeamLoadGuard],
-        children: [
+    },
 
-        ]
+    {
+        path: 'players/:id',
+        component: PlayerComponent,
+        canActivate: [PlayerLoadGuard]
     },
 
     {
@@ -67,7 +71,7 @@ const appRoutes: Routes = [
             },
 
             {
-                path: 'fantasy-teams',
+                path: 'fantasy-teams/:id',
                 component: UserFantasyTeamsComponent
             },
 
@@ -179,7 +183,8 @@ const appRoutes: Routes = [
         NoLoginGuard,
         ApiGuard,
         TeamLoadGuard,
-        MatchFixtureGuard
+        MatchFixtureGuard,
+        PlayerLoadGuard
     ],
 
     bootstrap: [AppComponent]

@@ -134,11 +134,11 @@
                                 </div>
                             </td>
                             <td><em [ngClass]="{'fa fa-exclamation-circle': player.captain}"></em></td>
-                            <td>{{(player.firstname + ' ' + player.lastname)}}</td>
+                            <td><a routerLink="/players/{{player.player_id}}" routerLinkActive="active">{{(player.firstname + ' ' + player.lastname)}}</a></td>
                             <td>{{player.position}}</td>
                             <td>{{player.nationality}}</td>
                             <td>{{(player.age?player.age:'')}}</td>
-                            <td><a><em class="fa fa-external-link"></em></a></td>
+                            <td><a routerLink="/players/{{player.player_id}}" routerLinkActive="active"><em class="fa fa-external-link"></em></a></td>
                         </tr>
                     </tbody>
                 </table>
