@@ -17,10 +17,11 @@ import { Fixtures, Fixture, StatusShort } from '../../interfaces/fixtures';
     styleUrls: ['./team.component.css']
 })
 
-export class TeamComponent implements OnInit, AfterViewInit {
+export class TeamComponent implements OnInit {
 
     @Output() rosterEmitter: EventEmitter<Players> = new EventEmitter();
     @Output() sortedFixturesEmitter: EventEmitter<Fixture[]> = new EventEmitter();
+    @Output() sortedLeaguesEmitter: EventEmitter<League[][]> = new EventEmitter();
 
     constructor(public userService: UserService, public api: ApiService, public router: Router) {
 
@@ -48,9 +49,13 @@ export class TeamComponent implements OnInit, AfterViewInit {
     playersSub;
     fixturesSub;
 
-    activeId: number;
+    activeLeague;
+    activeSeason;
 
     test;
+
+    leagueMap = {}
+    sortedLeagues: League[][];
 
     playerMap = {};
     sortedPlayers: Player[] = [];
@@ -80,25 +85,6 @@ export class TeamComponent implements OnInit, AfterViewInit {
             (fixtures: Fixtures) => this.sortedFixturesEmitter.emit(fixtures.api.fixtures)
         );
 
-    }
-
-    ngAfterViewInit() {
-
-        if (this.api.teams !== null && this.api.teams.api.teams[0].team_id === this.teamId) {
-
-            this.api.resendTeams();
-        }
-
-        if (this.api.leagues !== null) {
-
-            for (const league of this.api.leagues.api.leagues) {
-
-                if (league.league_id === this.leagueId) {
-
-                    this.api.resendLeagues();
-                }
-            }
-        }
     }
 
     onRouteEvent(event) {
@@ -131,35 +117,72 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         if (!this.loaded && this.teamsInit && this.leaguesInit) {
 
+            this.sortLeagues(leagues.api.leagues);
+
             for (let i = 0 ; i < leagues.api.leagues.length ; i++) {
 
                 this.seasonMap[leagues.api.leagues[i].league_id] = i;
             }
 
-            const y = leagues.api.leagues[leagues.api.leagues.length - 1].season;
+            this.activeLeague = {
+                name: this.sortedLeagues[0][0].name,
+                idx: 0
+            }
 
-            this.activeId = leagues.api.leagues[leagues.api.leagues.length - 1].league_id;
-            this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
+            this.activeSeason = {
+
+                name: this.sortedLeagues[0][0].season,
+                id: this.sortedLeagues[0][0].league_id,
+                idx: 0
+            }
+
+            const y = this.activeSeason.name;
+
+            this.api.getSeasonStatistics(this.activeSeason.id, this.api.teams.api.teams[0].team_id);
             this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
-            this.api.getTeamFixturesBySeason(this.activeId, this.api.teams.api.teams[0].team_id);
+            this.api.getTeamFixturesBySeason(this.activeSeason.id, this.api.teams.api.teams[0].team_id);
 
             this.loaded = true;
         }
     }
 
-    onTabClick(id: number) {
+    switchLeague(league: League, idx: number) {
 
-        if (id !== this.activeId) {
+        this.activeLeague = { 
+            name: league.name,
+            idx
+        };
 
-            this.activeId = id;
+        this.activeSeason = {
+
+            name: league.season,
+            id: league.league_id,
+            idx: -1
+        }
+
+        this.switchSeason(league, 0);
+    }
+
+    switchSeason(league: League, idx: number) {
+
+        if (idx !== this.activeSeason.idx) {
+
+            this.activeSeason = {
+
+                name: league.season,
+                id: league.league_id,
+                idx
+            }
+
             this.sorted = false;
             this.matchsFilterOption = 0;
             this.rosterSortOption = 0;
 
-            const y = this.api.leagues.api.leagues[this.seasonMap[this.activeId]].season;
-            this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
+            const y = this.sortedLeagues[this.activeLeague.idx][this.activeSeason.idx].season;
+            this.api.getSeasonStatistics(this.activeSeason.id, this.api.teams.api.teams[0].team_id);
             this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
-            this.api.getTeamFixturesBySeason(this.activeId, this.api.teams.api.teams[0].team_id);
+            this.api.getTeamFixturesBySeason(this.activeSeason.id, this.api.teams.api.teams[0].team_id);
+
         }
     }
 
@@ -169,7 +192,7 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
             this.api.getPlayersByTeamSeason(
 
-                this.api.leagues.api.leagues[this.seasonMap[this.activeId]].season.toString(), this.api.teams.api.teams[0].team_id
+                this.activeSeason.name, this.api.teams.api.teams[0].team_id
             );
 
             this.sorted = true;
@@ -218,5 +241,49 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         this.sortedFixturesEmitter.emit(this.futureFixtures);
 
+    }
+
+    sortLeagues(leagues: League[]) {
+
+        this.sortedLeagues = [];
+        this.leagueMap = {};
+
+        let idx = 0;
+
+        for (const league of leagues) {
+
+            if (this.leagueMap[league.name] !== undefined) {
+
+                this.sortedLeagues[this.leagueMap[league.name]].push(league);
+
+            } else {
+
+                this.leagueMap[league.name] = idx;
+                this.sortedLeagues[idx] = [];
+                this.sortedLeagues[idx].push(league);
+                idx++;
+            }
+        }
+
+        for (let league of this.sortedLeagues) {
+
+            league.sort(
+                (l1: League, l2: League) => {
+                    if (l1.season > l2.season) {
+
+                        return -1;
+                    }
+
+                    if (l1.season < l2.season) {
+
+                        return 1;
+                    }
+
+                    return 0;
+                    
+                })
+        }
+
+        this.sortedLeaguesEmitter.emit(this.sortedLeagues);
     }
 }

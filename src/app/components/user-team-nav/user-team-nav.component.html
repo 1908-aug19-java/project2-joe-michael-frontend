@@ -44,7 +44,7 @@
             <ul *ngIf="expandedState===2" class="list-no-bullet">
 
                 <li *ngFor="let obj of userService.tempFollowedTeams" class="nav-item">
-                    <a routerLink="/teams/{{obj.league}}/{{obj.team.team_id}}" routerLinkActive="active" class="nav-link p-0">{{obj.team.name}}</a>
+                    <a routerLink="/teams/{{obj.team.team_id}}" routerLinkActive="active" class="nav-link p-0">{{obj.team.name}}</a>
                 </li>
 
             </ul>

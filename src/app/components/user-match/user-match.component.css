@@ -1,19 +1,17 @@
 .home-team-container {
 
-    margin: 20px;
-    height: 30vh;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-right: 1px solid #DEE2E6!important;
+    border-bottom: 1px solid #DEE2E6!important;
 }
 
 .away-team-container {
 
-    margin: 20px;
-    height: 30vh;
-}
-
-.combined-statistics-div {
-
-    height: 25vh;
-    margin: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    border-left: 1px solid #DEE2E6!important;
+    border-bottom: 1px solid #DEE2E6!important;
 }
 
 .team-logo-image {
@@ -25,4 +23,50 @@
 a {
 
     color: inherit;
+}
+
+.general-container {
+
+    margin: 20px;
+    margin-right: 50px;
+}
+
+a.display-4 {
+
+    font-size: 2.4vw;
+}
+
+.match-results {
+
+    min-height: 13vh;
+}
+
+.home-team-stat {
+
+    padding-right: 20px;
+    padding-top: 20px;
+    border-right: 1px solid #DEE2E6!important;
+    border-top: 1px solid #DEE2E6!important;
+
+    min-height: 50vh;
+}
+
+.away-team-stat {
+
+    padding-left: 20px;
+    padding-top: 20px;
+    border-left: 1px solid #DEE2E6!important;
+    border-top: 1px solid #DEE2E6!important;
+
+    min-height: 50vh;
+}
+
+p.display-4 {
+
+    font-size: 2.0vw;
+}
+
+.wager-button {
+
+    padding-top: 20px;
 }

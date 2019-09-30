@@ -32,6 +32,8 @@ import { PlayerLoadGuard } from './guards/player-load.guard';
 import { MatchesFilterPipe } from './pipes/matches-filter.pipe';
 import { RosterFilterPipe } from './pipes/roster-filter.pipe';
 import { PlayerComponent } from './components/player/player.component';
+import { UpcomingLeagueFilterPipe } from './pipes/upcoming-league-filter.pipe';
+import { UserFilterPipe } from './pipes/user-filter.pipe';
 
 const appRoutes: Routes = [
 
@@ -42,7 +44,7 @@ const appRoutes: Routes = [
     },
 
     {
-        path: 'teams/:league/:team',
+        path: 'teams/:team',
         component: TeamComponent,
         canActivate: [TeamLoadGuard],
     },
@@ -62,7 +64,7 @@ const appRoutes: Routes = [
     {
         path: 'user',
         component: UserPageComponent,
-        canActivate: [LoginGuard, ApiGuard],
+        canActivate: [LoginGuard],
         children: [
 
             {
@@ -93,6 +95,7 @@ const appRoutes: Routes = [
             {
                 path: 'matchs',
                 component: UserMatchsComponent,
+                canActivate: [ApiGuard]
             },
 
             {
@@ -161,7 +164,9 @@ const appRoutes: Routes = [
         TeamComponent,
         MatchesFilterPipe,
         RosterFilterPipe,
-        PlayerComponent
+        PlayerComponent,
+        UpcomingLeagueFilterPipe,
+        UserFilterPipe
     ],
 
     imports: [

@@ -59,4 +59,16 @@
 a {
 
     color: inherit;
+    cursor: pointer;
+}
+
+.upcoming-header {
+
+    margin: 20px;
+}
+
+.leagues-dropdown {
+
+    max-height: 40vh;
+    overflow-y: scroll;
 }

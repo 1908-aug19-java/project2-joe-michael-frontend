@@ -46,6 +46,18 @@ export class UserService {
         level: 1
     };
 
+    temp3: User = {
+
+        id:3,
+        username: 'ellu1',
+        password: 'password123',
+        email: 'ellu1@test.com',
+        firstname: 'Elena',
+        lastname: 'Lu',
+        level: 1
+    }
+
+    tempUsers: User[] = [this.temp1, this.temp2, this.temp3];
     tempFantasyTeams = ['t1', 'yml1', 'yes'];
     tempFollowedTeams: {team: Team, league: number}[] = JSON.parse(window.sessionStorage.getItem('followedTeams')) || [];
     tempFollowedPlayers: {id: number, name: string}[] = JSON.parse(window.sessionStorage.getItem('followedPlayers')) || [];

@@ -24,21 +24,31 @@
             </div>
         </div>
 
-        <div *ngIf="api.leaguesEmitter | async as le" class="team-season-navtab">
+        <div *ngIf="sortedLeaguesEmitter | async as sle" class="team-season-navtab">
 
             <ul class="nav nav-tabs">
 
-                <li class="nav-item">
-                    <a class="nav-link disabled lead text-dark">{{le.api.leagues[le.api.results - 1].name}}</a>
+                <li class="nav-item dropright">
+
+                    <a class="nav-link responsive-tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{activeLeague.name}}</a>
+
+                    <div class="dropdown-menu">
+
+                        <a *ngFor="let league of sle; let i = index" (click)="switchLeague(league[0], i)" class="dropdown-item" [ngClass]="{'active': activeLeague.idx === i}">{{league[0].name}}</a>
+
+                    </div>
                 </li>
 
-                <li *ngFor="let l of le.api.leagues" class="nav-item">
-                    <a class="nav-link lead" (click)="onTabClick(l.league_id);" [ngClass]="{'active': activeId === l.league_id}">{{l.season}}</a>
+                <li *ngFor="let season of sle[activeLeague.idx]; let i = index" class="nav-item">
+
+                    <a class="nav-link responsive-tab" (click)="switchSeason(season, i)" [ngClass]="{'active': activeSeason.idx === i}">{{season.season}}</a>
+
                 </li>
 
             </ul>
 
         </div>
+        
         <div class="row team-season-statistics">
             <div *ngIf="api.seasonStatisticsEmitter | async as sse" class="col-3 stats-col">
 
@@ -74,7 +84,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link lead" (click)="matchsFilterOption=2;" [ngClass]="{'active': matchsFilterOption==2, 'disabled nav-text text-muted': !api.leagues.api.leagues[this.seasonMap[this.activeId]].is_current, 'nav-link text-dark': api.leagues.api.leagues[this.seasonMap[this.activeId]]}">Upcoming</a>
+                                <a class="nav-link lead" (click)="matchsFilterOption=2;" [ngClass]="{'active': matchsFilterOption==2, 'disabled text-muted': !sortedLeagues[activeLeague.idx][activeSeason.idx].is_current, 'text-dark': sortedLeagues[activeLeague.idx][activeSeason.idx].is_current}">Upcoming</a>
                             </li>
 
                         </ul>
@@ -105,7 +115,7 @@
                         <tr>
                             <th scope="col" class="roster-table-icon"></th>
                             <th scope="col" class="roster-table-icon"></th>
-                            <th scope="col" class="roster-table-icon"><a (click)="rosterSortOption=0"><em class="fa fa-exclamation-circle"></em></a></th>
+                            <th scope="col" class="roster-table-icon"><a (click)="rosterSortOption=0" class="tooltip-test" title="Filter By Captains."><em class="fa fa-exclamation-circle"></em></a></th>
                             <th scope="col" class="roster-table-name"><a (click)="rosterSortOption=1">Name</a></th>
                             <th scope="col" class="roster-table-position"><a (click)="rosterSortOption=2">Position</a></th>
                             <th scope="col" class="roster-table-position"><a  (click)="rosterSortOption=3">Nationality</a></th>
@@ -133,16 +143,17 @@
 
                                 </div>
                             </td>
-                            <td><em [ngClass]="{'fa fa-exclamation-circle': player.captain}"></em></td>
+                            <td><a class="tooltip-test" title="Captain"><em [ngClass]="{'fa fa-exclamation-circle': player.captain}"></em></a></td>
                             <td><a routerLink="/players/{{player.player_id}}" routerLinkActive="active">{{(player.firstname + ' ' + player.lastname)}}</a></td>
                             <td>{{player.position}}</td>
                             <td>{{player.nationality}}</td>
                             <td>{{(player.age?player.age:'')}}</td>
-                            <td><a routerLink="/players/{{player.player_id}}" routerLinkActive="active"><em class="fa fa-external-link"></em></a></td>
+                            <td><a class="tooltip-test" title="Player page" routerLink="/players/{{player.player_id}}" routerLinkActive="active"><em class="fa fa-external-link"></em></a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+    
     </div>
 </div>
