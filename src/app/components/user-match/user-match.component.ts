@@ -1,37 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { FixtureService } from '../../services/fixture.service';
+import { ApiService } from '../../services/api.service';
 
 import { Fixture, Fixtures } from '../../interfaces/fixtures';
 
 @Component({
-  selector: 'app-user-match',
-  templateUrl: './user-match.component.html',
-  styleUrls: ['./user-match.component.css']
+    selector: 'app-user-match',
+    templateUrl: './user-match.component.html',
+    styleUrls: ['./user-match.component.css']
 })
-export class UserMatchComponent implements OnInit {
 
-  constructor(private fixtureService: FixtureService,
-              private route: ActivatedRoute,
-              private location: Location
-              ) { }
+export class UserMatchComponent implements OnInit, AfterViewInit {
 
-  fixtures: Fixtures;
-  fixture: Fixture;
-  show: string;
+    constructor(public api: ApiService,
+                private route: ActivatedRoute,
+                private location: Location) { }
 
-  ngOnInit() {
+    matchFixtures;
+    matchFixtureSub;
 
-      this.getFixtures();
-  }
+    ngOnInit() {
 
+        this.matchFixtureSub = this.api.matchFixtureEmitter.subscribe((fixtures: Fixtures) => this.matchFixtures = fixtures);
+    }
 
-  getFixtures() {
+    ngAfterViewInit() {
 
-      this.fixtures = this.fixtureService.fixtures;
-      this.fixture = this.fixtureService.getFixtureById(+this.route.snapshot.paramMap.get('id'));
-      this.show = JSON.stringify(this.fixture);
-  }
+        this.api.resendMatchFixture();
+    }
 }

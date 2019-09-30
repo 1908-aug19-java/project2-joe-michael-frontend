@@ -26,7 +26,7 @@
             <ul *ngIf="expandedState===1" class="list-no-bullet">
 
                 <li *ngFor="let team of userService.tempFantasyTeams" class="nav-item">
-                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
+                    <a routerLink="/user/fantasy-teams/{{team}}" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
                 </li>
 
                 <hr />
@@ -56,7 +56,7 @@
             <ul *ngIf="expandedState===3" class="list-no-bullet">
 
                 <li *ngFor="let player of userService.tempFollowedPlayers" class="nav-item">
-                    <a routerLink="/user/followed-players" routerLinkActive="active" class="nav-link p-0">{{player.name}}</a>
+                    <a routerLink="/players/{{player.id}}" routerLinkActive="active" class="nav-link p-0">{{player.name}}</a>
                 </li>
 
             </ul>
@@ -64,7 +64,7 @@
             <li class="nav-divider"></li>
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/user/matches" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matches</a>
+                <a class="nav-link" routerLink="/user/matchs" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matchs</a>
             </li>
 
             <li class="nav-item">

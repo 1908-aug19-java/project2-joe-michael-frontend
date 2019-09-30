@@ -5,6 +5,8 @@ import { Players, Player } from '../interfaces/players';
 import { Teams, Team } from '../interfaces/team';
 import { Leagues, League } from '../interfaces/leagues';
 
+import * as dbVar from './key';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -14,6 +16,8 @@ export class UserService {
     @Output() userEmitter: EventEmitter<User> = new EventEmitter();
 
     constructor() { }
+
+    dbUrl = dbVar.dbUrl;
 
     usernameFilter: RegExp = /^[a-zA-Z0-9@.-]{1,}$/g;
     emailFilter: RegExp = /(\b[a-zA-Z0-9.-]{3,}\b)\@(\b[a-zA-Z]{1,}\b)\.(\b[a-zA-Z]{2,}\b)/g;

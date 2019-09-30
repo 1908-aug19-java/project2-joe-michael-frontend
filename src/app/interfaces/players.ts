@@ -13,7 +13,7 @@ export interface Player {
     firstname: string;
     lastname: string;
     number: string;
-    position: Position;
+    position: string;
     age: number;
     birth_date: string;
     birth_place: null | string;

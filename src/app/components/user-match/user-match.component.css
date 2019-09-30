@@ -21,3 +21,8 @@
     min-height: 128px;
     min-width: 128px;
 }
+
+a {
+
+    color: inherit;
+}

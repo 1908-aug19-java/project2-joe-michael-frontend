@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 import { ApiService } from '../../services/api.service';
@@ -9,6 +9,7 @@ import { Team, Teams } from '../../interfaces/team';
 import { League, Leagues } from '../../interfaces/leagues';
 import { SeasonStatistics, Statistics } from '../../interfaces/season-statistics';
 import { Players, Player } from '../../interfaces/players';
+import { Fixtures, Fixture, StatusShort } from '../../interfaces/fixtures';
 
 @Component({
     selector: 'app-team',
@@ -19,6 +20,7 @@ import { Players, Player } from '../../interfaces/players';
 export class TeamComponent implements OnInit, AfterViewInit {
 
     @Output() rosterEmitter: EventEmitter<Players> = new EventEmitter();
+    @Output() sortedFixturesEmitter: EventEmitter<Fixture[]> = new EventEmitter();
 
     constructor(public userService: UserService, public api: ApiService, public router: Router) {
 
@@ -44,6 +46,7 @@ export class TeamComponent implements OnInit, AfterViewInit {
     leaguesSub;
     seasonStatisticsSub;
     playersSub;
+    fixturesSub;
 
     activeId: number;
 
@@ -51,6 +54,11 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
     playerMap = {};
     sortedPlayers: Player[] = [];
+
+    futureFixtures: Fixture[] = [];
+
+    matchsFilterOption = 0;
+    rosterSortOption = 0;
 
     seasonMap = {};
 
@@ -67,6 +75,10 @@ export class TeamComponent implements OnInit, AfterViewInit {
         this.leaguesSub = this.api.leaguesEmitter.subscribe((leagues: Leagues) => this.initLeagues(leagues));
         this.playersSub = this.api.playersEmitter.subscribe((players: Players) => this.sortPlayers(players.api.players));
         this.teamsSub = this.api.teamsEmitter.subscribe((teams: Teams) => this.initTeams(teams));
+
+        this.fixturesSub = this.api.teamFixturesEmitter.subscribe(
+            (fixtures: Fixtures) => this.sortedFixturesEmitter.emit(fixtures.api.fixtures)
+        );
 
     }
 
@@ -91,20 +103,21 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
     onRouteEvent(event) {
 
-        if (event instanceof NavigationEnd) {
+        if (event instanceof NavigationStart) {
 
             this.loaded = false;
             this.seasonCheck = false;
             this.sorted = false;
             this.teamsInit = false;
             this.leaguesInit = false;
+            this.matchsFilterOption = 0;
+            this.rosterSortOption = 0;
         }
     }
 
     initLeagues(leagues: Leagues) {
 
         this.leaguesInit = true;
-
         this.attemptInit(leagues);
     }
 
@@ -118,9 +131,6 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         if (!this.loaded && this.teamsInit && this.leaguesInit) {
 
-            console.log(this.api.leagues);
-            console.log(this.api.teams);
-
             for (let i = 0 ; i < leagues.api.leagues.length ; i++) {
 
                 this.seasonMap[leagues.api.leagues[i].league_id] = i;
@@ -131,6 +141,7 @@ export class TeamComponent implements OnInit, AfterViewInit {
             this.activeId = leagues.api.leagues[leagues.api.leagues.length - 1].league_id;
             this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
             this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
+            this.api.getTeamFixturesBySeason(this.activeId, this.api.teams.api.teams[0].team_id);
 
             this.loaded = true;
         }
@@ -140,15 +151,15 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         if (id !== this.activeId) {
 
-            console.log(this.api.leagues);
-            console.log(this.api.teams);
-
             this.activeId = id;
             this.sorted = false;
+            this.matchsFilterOption = 0;
+            this.rosterSortOption = 0;
 
             const y = this.api.leagues.api.leagues[this.seasonMap[this.activeId]].season;
             this.api.getSeasonStatistics(this.activeId, this.api.teams.api.teams[0].team_id);
             this.api.getPlayersByTeamSeason(`${y}-${y + 1}`, this.api.teams.api.teams[0].team_id);
+            this.api.getTeamFixturesBySeason(this.activeId, this.api.teams.api.teams[0].team_id);
         }
     }
 
@@ -172,6 +183,11 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         for (const player of players) {
 
+            if (player.firstname == null) {
+
+                continue;
+            }
+
             if (this.playerMap[player.player_id] == null) {
 
                 this.playerMap[player.player_id] = idx;
@@ -183,5 +199,24 @@ export class TeamComponent implements OnInit, AfterViewInit {
 
         this.rosterEmitter.emit({api: {results: this.sortedPlayers.length, players: this.sortedPlayers}});
         this.sorted = true;
+    }
+
+    sortFixtures(fixtures: Fixture[]) {
+
+        let idx = 0;
+
+        this.futureFixtures = [];
+
+        for (const fixture of fixtures) {
+
+            if (fixture.statusShort === StatusShort.NS && idx < 3) {
+
+                this.futureFixtures.push(fixture);
+                idx++;
+            }
+        }
+
+        this.sortedFixturesEmitter.emit(this.futureFixtures);
+
     }
 }

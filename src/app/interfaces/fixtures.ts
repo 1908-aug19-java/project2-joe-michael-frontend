@@ -34,17 +34,10 @@ export interface Team {
 }
 
 export interface Score {
-    halftime: Halftime | null;
+    halftime: string | null;
     fulltime: null | string;
     extratime: null;
     penalty: null;
-}
-
-export enum Halftime {
-    The00 = '0-0',
-    The01 = '0-1',
-    The10 = '1-0',
-    The12 = '1-2',
 }
 
 export enum Status {
