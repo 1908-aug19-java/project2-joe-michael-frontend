@@ -48,14 +48,14 @@ export class UserService {
 
     temp3: User = {
 
-        id:3,
+        id: 3,
         username: 'ellu1',
         password: 'password123',
         email: 'ellu1@test.com',
         firstname: 'Elena',
         lastname: 'Lu',
         level: 1
-    }
+    };
 
     tempUsers: User[] = [this.temp1, this.temp2, this.temp3];
     tempFantasyTeams = ['t1', 'yml1', 'yes'];

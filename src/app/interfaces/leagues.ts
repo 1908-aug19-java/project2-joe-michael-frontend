@@ -8512,7 +8512,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 617,
-                name: 'Division d'Honneur',
+                name: 'Division d\'Honneur',
                 type: 'League',
                 country: 'Guadeloupe',
                 country_code: 'GP',
@@ -8526,7 +8526,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 618,
-                name: 'Division d'Honneur',
+                name: 'Division d\'Honneur',
                 type: 'League',
                 country: 'Guadeloupe',
                 country_code: 'GP',
@@ -8540,7 +8540,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 619,
-                name: 'Division d'Honneur',
+                name: 'Division d\'Honneur',
                 type: 'League',
                 country: 'Guadeloupe',
                 country_code: 'GP',
@@ -8792,7 +8792,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 637,
-                name: 'Ligat ha'Al',
+                name: 'Ligat ha\'Al',
                 type: 'League',
                 country: 'Israel',
                 country_code: 'IL',
@@ -8806,7 +8806,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 638,
-                name: 'Ligat ha'Al',
+                name: 'Ligat ha\'Al',
                 type: 'League',
                 country: 'Israel',
                 country_code: 'IL',
@@ -8820,7 +8820,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 639,
-                name: 'Ligat ha'Al',
+                name: 'Ligat ha\'Al',
                 type: 'League',
                 country: 'Israel',
                 country_code: 'IL',
@@ -8834,7 +8834,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 640,
-                name: 'Ligat ha'Al',
+                name: 'Ligat ha\'Al',
                 type: 'League',
                 country: 'Israel',
                 country_code: 'IL',
@@ -12600,7 +12600,7 @@ export const LeagueRef: Leagues = {
             },
             {
                 league_id: 911,
-                name: 'Division d'Honneur',
+                name: 'Division d\'Honneur',
                 type: 'League',
                 country: 'Guadeloupe',
                 country_code: 'GP',
@@ -13566,4 +13566,4 @@ export const LeagueRef: Leagues = {
             }
         ]
     }
-}
+};

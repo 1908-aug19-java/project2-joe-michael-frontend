@@ -11,11 +11,11 @@ export class UpcomingLeagueFilterPipe implements PipeTransform {
     leagues: League[] = LeagueRef.api.leagues;
 
     transform(fixtures: Fixture[], sortOptions?): any {
-        
-        let map = sortOptions[0];
-        let opt = sortOptions[1];
 
-        if (opt == 0) {
+        const map = sortOptions[0];
+        const opt = sortOptions[1];
+
+        if (opt === 0) {
 
             return fixtures;
         }
@@ -25,7 +25,7 @@ export class UpcomingLeagueFilterPipe implements PipeTransform {
 
     filterHelper(fixture: Fixture, map, opt) {
 
-        let league = this.findLeague(fixture.league_id, 0);
+        const league = this.findLeague(fixture.league_id, 0);
 
         if (league === null) {
 
@@ -37,16 +37,16 @@ export class UpcomingLeagueFilterPipe implements PipeTransform {
 
     findLeague(guess: number, last: number): League {
 
-        let init: League = this.leagues[guess - 1 + last];
+        const init: League = this.leagues[guess - 1 + last];
 
-        if(init === undefined) {
+        if (init === undefined) {
 
             return null;
         }
 
         if (init.league_id > guess) {
 
-            if(last >= 1) {
+            if (last >= 1) {
 
                 return null;
             }
@@ -56,7 +56,7 @@ export class UpcomingLeagueFilterPipe implements PipeTransform {
 
         if (init.league_id < guess) {
 
-            if(last <= -1) {
+            if (last <= -1) {
 
                 return null;
             }

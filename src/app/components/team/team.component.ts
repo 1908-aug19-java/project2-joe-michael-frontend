@@ -54,7 +54,7 @@ export class TeamComponent implements OnInit {
 
     test;
 
-    leagueMap = {}
+    leagueMap = {};
     sortedLeagues: League[][];
 
     playerMap = {};
@@ -127,14 +127,14 @@ export class TeamComponent implements OnInit {
             this.activeLeague = {
                 name: this.sortedLeagues[0][0].name,
                 idx: 0
-            }
+            };
 
             this.activeSeason = {
 
                 name: this.sortedLeagues[0][0].season,
                 id: this.sortedLeagues[0][0].league_id,
                 idx: 0
-            }
+            };
 
             const y = this.activeSeason.name;
 
@@ -148,7 +148,7 @@ export class TeamComponent implements OnInit {
 
     switchLeague(league: League, idx: number) {
 
-        this.activeLeague = { 
+        this.activeLeague = {
             name: league.name,
             idx
         };
@@ -158,7 +158,7 @@ export class TeamComponent implements OnInit {
             name: league.season,
             id: league.league_id,
             idx: -1
-        }
+        };
 
         this.switchSeason(league, 0);
     }
@@ -172,7 +172,7 @@ export class TeamComponent implements OnInit {
                 name: league.season,
                 id: league.league_id,
                 idx
-            }
+            };
 
             this.sorted = false;
             this.matchsFilterOption = 0;
@@ -265,7 +265,7 @@ export class TeamComponent implements OnInit {
             }
         }
 
-        for (let league of this.sortedLeagues) {
+        for (const league of this.sortedLeagues) {
 
             league.sort(
                 (l1: League, l2: League) => {
@@ -280,8 +280,7 @@ export class TeamComponent implements OnInit {
                     }
 
                     return 0;
-                    
-                })
+                });
         }
 
         this.sortedLeaguesEmitter.emit(this.sortedLeagues);

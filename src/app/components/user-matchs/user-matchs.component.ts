@@ -41,7 +41,7 @@ export class UserMatchsComponent implements OnInit {
 
         this.activeFixture = this.activeFixture === id ? 0 : id;
 
-        if(this.activeFixture) {
+        if (this.activeFixture) {
 
             this.api.getFixturePredictionById(id);
         }
@@ -54,16 +54,16 @@ export class UserMatchsComponent implements OnInit {
 
         let idx = 0;
 
-        for (let fixture of fixtures.api.fixtures) {
+        for (const fixture of fixtures.api.fixtures) {
 
-            let league: League = this.findLeague(fixture.league_id, 0);
+            const league: League = this.findLeague(fixture.league_id, 0);
 
-            if(league === null) {
+            if (league === null) {
 
                 continue;
             }
 
-            if(this.leagueMap[league.name] === undefined) {
+            if (this.leagueMap[league.name] === undefined) {
 
                 this.leagueMap[league.name] = idx;
                 this.leagueMap[idx] = league.name;
@@ -79,16 +79,16 @@ export class UserMatchsComponent implements OnInit {
 
     findLeague(guess: number, last: number): League {
 
-        let init: League = this.leagues[guess - 1 + last];
+        const init: League = this.leagues[guess - 1 + last];
 
-        if(init === undefined) {
+        if (init === undefined) {
 
             return null;
         }
 
         if (init.league_id > guess) {
 
-            if(last >= 1) {
+            if (last >= 1) {
 
                 return null;
             }
@@ -98,7 +98,7 @@ export class UserMatchsComponent implements OnInit {
 
         if (init.league_id < guess) {
 
-            if(last <= -1) {
+            if (last <= -1) {
 
                 return null;
             }
