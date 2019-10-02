@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { UserService } from '../../services/user.service';
 
 import { Fixture, Fixtures } from '../../interfaces/fixtures';
+import { NewWager } from '../../interfaces/user';
 
 @Component({
     selector: 'app-user-match',
@@ -33,6 +34,8 @@ export class UserMatchComponent implements OnInit {
     finished = false;
 
     fixture: Fixture;
+
+    guessStringEnum: string[] = ['HOME', 'AWAY', 'TIE'];
 
     ngOnInit() {
 
@@ -69,17 +72,18 @@ export class UserMatchComponent implements OnInit {
 
     makeWager() {
 
-        const wager = {
+        const receivingUser = this.userService.findUser(parseInt(this.wagerRecipient.toString(), 10));
+        const wager: NewWager = {
+
             amt: this.wagerAmount,
             initiating: this.userService.user,
-            recieving: this.userService.findUser(this.wagerRecipient),
+            recieving: receivingUser,
             api_game_id: this.fixture.fixture_id,
-            accepted: false,
-            resolution: 0
+            guess: this.wagerVictor,
+            accepted: false
         };
 
-        console.log(wager);
-
         this.wagerAvailable = false;
+        this.userService.addNewWager(wager);
     }
 }

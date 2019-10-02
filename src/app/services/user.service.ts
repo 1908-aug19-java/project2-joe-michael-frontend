@@ -2,7 +2,7 @@ import { Injectable, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { User, UserLogin, UserTeam, UserPlayer, NewPlayer, NewTeam } from '../interfaces/user';
+import { User, UserLogin, UserTeam, UserPlayer, UserWager, NewPlayer, NewTeam, NewWager } from '../interfaces/user';
 import { Players, Player } from '../interfaces/players';
 import { Teams, Team } from '../interfaces/team';
 import { Leagues, League } from '../interfaces/leagues';
@@ -12,6 +12,7 @@ import * as dbVar from './key';
 @Injectable({
     providedIn: 'root'
 })
+
 export class UserService {
 
     @Output() loginEmitter: EventEmitter<boolean> = new EventEmitter();
@@ -31,7 +32,9 @@ export class UserService {
 
     user: User = JSON.parse(window.sessionStorage.getItem('user'));
     loggedIn: boolean = window.sessionStorage.getItem('loggedIn') === 'true';
-    token = window.sessionStorage.getItem('token');
+
+    token = window.sessionStorage.getItem('token') !== null &&
+        window.sessionStorage.getItem('token').substring(1, window.sessionStorage.getItem('token').length - 1);
 
     users: User[] = JSON.parse(window.sessionStorage.getItem('users')) || [];
 
@@ -40,7 +43,15 @@ export class UserService {
     followedTeams: UserTeam[] = JSON.parse(window.sessionStorage.getItem('followedTeams')) || [];
     followedPlayers: UserPlayer[] = JSON.parse(window.sessionStorage.getItem('followedPlayers')) || [];
 
+    wagers: UserWager[] = JSON.parse(window.sessionStorage.getItem('wagers')) || [];
+
     httpRequestQueue = [];
+
+    /*
+        #################
+        CLIENT-SIDE LOGIC
+        #################
+    */
 
     followPlayer(player: Player) {
 
@@ -89,8 +100,6 @@ export class UserService {
 
     isPlayerFollowed(player: Player): number {
 
-        console.log(this.followedPlayers);
-
         for (const obj of this.followedPlayers) {
 
             if (obj.api_player_id === player.player_id) {
@@ -115,6 +124,47 @@ export class UserService {
         return -1;
     }
 
+    findWagerByFixture(id: number): number {
+
+        for (const obj of this.wagers) {
+
+            if (obj.api_game_id === id) {
+
+                return this.wagers.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
+    findWagerById(id: number): number {
+
+        for (const obj of this.wagers) {
+
+            if (obj.id === id) {
+
+                return this.wagers.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
+    acceptWager(id: number, res: boolean) {
+
+        const updatedWager: UserWager = this.wagers[this.findWagerById(id)];
+
+        updatedWager.accepted = true;
+
+        if (!res) {
+
+            updatedWager.resolution = 3;
+        }
+
+        this.updateWager(updatedWager);
+
+    }
+
     makeHeaders(userId: number, token: string) {
 
         const httpOptions = {
@@ -126,12 +176,6 @@ export class UserService {
 
         return httpOptions;
     }
-
-    // Status Codes
-    // 0 - Null
-    // 1 - Login Success
-    // 2 - Invalid Username Format
-    // 3 - Invalid Username Password Combination
 
     logIn(username: string, password: string) {
 
@@ -171,8 +215,8 @@ export class UserService {
         this.setLogin(true);
         this.setUser(user);
         this.setToken(token);
-
         this.getUsers();
+        this.getWagersByUserId();
 
         this.router.navigate(['/user']);
     }
@@ -207,172 +251,17 @@ export class UserService {
                 this.fantasyTeams.push(team);
             }
         }
-    }
 
-    getUsers() {
-
-        const requestUrl = `${this.dbUrl}/users`;
-
-        this.http.get<User[]>(requestUrl, this.makeHeaders(this.user.id, this.token)).subscribe(
-            (users: User[]) => this.setUsers(users)
-        );
-    }
-
-    setUsers(users: User[]) {
-
-        const sortedUsers: User[] = [...users].sort((u1: User, u2: User) => {
-
-            if (u1.id > u2.id) {
-
-                return 1;
-            }
-
-            if (u1.id < u2.id) {
-
-                return -1;
-            }
-
-            return 0;
-        });
-
-        window.sessionStorage.setItem('users', JSON.stringify(sortedUsers));
-        this.users = sortedUsers;
-        this.usersEmitter.emit(sortedUsers);
-    }
-
-    addFollowedPlayer(newPlayer: NewPlayer) {
-
-        const requestUrl = `${this.dbUrl}/players`;
-
-        const httpOptions = {
-
-            headers: new HttpHeaders(
-                {
-                    user_id: this.user.id.toString(),
-                    token: this.token.substring(1, this.token.length - 1)
-                }
-            ),
-
-            params: {
-
-                user_id: this.user.id.toString()
-            }
-        };
-
-        this.http.post<UserPlayer>(requestUrl, newPlayer, httpOptions).subscribe(
-
-            (player: UserPlayer) => {
-                this.followedPlayers.push(player);
-                window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
-            },
-
-            error => console.log(error)
-        );
-    }
-
-    deleteFollowedPlayer(userPlayer: UserPlayer, idx: number) {
-
-        const requestUrl = `${this.dbUrl}/players/${userPlayer.id}`;
-
-        const httpOptions = {
-
-            headers: new HttpHeaders(
-                {
-                    user_id: this.user.id.toString(),
-                    token: this.token.substring(1, this.token.length - 1)
-                }
-            ),
-
-            params: {
-
-                user_id: this.user.id.toString()
-            }
-        };
-
-        this.http.delete<UserPlayer>(requestUrl, httpOptions).subscribe(
-
-            (player: UserPlayer) => {
-                this.followedPlayers.splice(idx, 1);
-                window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
-            },
-
-            error => console.log(error)
-        );
-    }
-
-    addFollowedTeam(newTeam: NewTeam) {
-
-        const requestUrl = `${this.dbUrl}/teams`;
-
-        const httpOptions = {
-
-            headers: new HttpHeaders(
-                {
-                    user_id: this.user.id.toString(),
-                    token: this.token.substring(1, this.token.length - 1)
-                }
-            ),
-
-            params: {
-
-                user_id: this.user.id.toString()
-            }
-        };
-
-        this.http.post<UserTeam>(requestUrl, newTeam, httpOptions).subscribe(
-
-            (team: UserTeam) => {
-                this.followedTeams.push(team);
-                window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
-            },
-
-            error => console.log(error)
-        );
-    }
-
-    deleteFollowedTeam(userTeam: UserTeam, idx: number) {
-
-        const requestUrl = `${this.dbUrl}/teams/${userTeam.id}`;
-
-        const httpOptions = {
-
-            headers: new HttpHeaders(
-                {
-                    user_id: this.user.id.toString(),
-                    token: this.token.substring(1, this.token.length - 1)
-                }
-            ),
-
-            params: {
-
-                user_id: this.user.id.toString()
-            }
-        };
-
-        this.http.delete<UserTeam>(requestUrl, httpOptions).subscribe(
-
-            (team: UserTeam) => {
-                this.followedTeams.splice(idx, 1);
-                window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
-            },
-
-            error => console.log(error)
-        );
+        window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
+        window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
+        window.sessionStorage.setItem('fantasyPlayers', JSON.stringify(this.fantasyPlayers));
+        window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
     }
 
     parseLoginError(error) {
 
         this.loginStatusEmitter.emit(3);
     }
-
-    // Status Codes
-    // 0 - Null
-    // 1 - Signup success
-    // 2 - Invalid Username / Email Format
-    // 3 - Invalid Password format
-    // 4 - Invalid Passwords - Don't match
-    // 5 - Username Already Taken
-    // 6 - Fields not all filled
 
     signUp(username: string, password: string, confirmationPassword: string) {
 
@@ -405,59 +294,6 @@ export class UserService {
 
     }
 
-    addUser(user: UserLogin) {
-
-        const requestUrl = `${this.dbUrl}/users`;
-
-        this.http.post<User>(requestUrl, user, {observe: 'response'}).subscribe(
-            (resp: HttpResponse<User>) => {
-                this.parseLoginUser(resp);
-                this.signupStatusEmitter.emit(1);
-            },
-
-            (error) => this.signupStatusEmitter.emit(5)
-        );
-    }
-
-    setLogin(value) {
-
-        window.sessionStorage.setItem('loggedIn', value);
-        this.loggedIn = value;
-        this.loginEmitter.emit(value);
-    }
-
-    getLoginStatus() {
-
-        return this.loginEmitter;
-    }
-
-    setUser(user) {
-
-        window.sessionStorage.setItem('user', JSON.stringify(user));
-        this.user = user;
-        this.userEmitter.emit(user);
-    }
-
-    getUser() {
-
-        return this.userEmitter;
-    }
-
-    setToken(token) {
-
-        window.sessionStorage.setItem('token', JSON.stringify(token));
-        this.token = token;
-    }
-
-    clean() {
-
-        this.setLogin(false);
-        this.setUser(null);
-
-        this.loggedIn = false;
-        this.user = null;
-    }
-
     findUser(id: number): User {
 
         return this.findUserHelper(id, 0, this.users.length - 1);
@@ -484,5 +320,311 @@ export class UserService {
 
             return this.findUserHelper(id, idx + 1, max);
         }
+    }
+
+    /*
+        #####################
+        COMMUNICATION METHODS
+        #####################
+    */
+
+    getUsers() {
+
+        const requestUrl = `${this.dbUrl}/users`;
+
+        this.http.get<User[]>(requestUrl, this.makeHeaders(this.user.id, this.token)).subscribe(
+            (users: User[]) => this.setUsers(users)
+        );
+    }
+
+    addFollowedPlayer(newPlayer: NewPlayer) {
+
+        const requestUrl = `${this.dbUrl}/players`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.post<UserPlayer>(requestUrl, newPlayer, httpOptions).subscribe(
+
+            (player: UserPlayer) => {
+                this.followedPlayers.push(player);
+                window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    deleteFollowedPlayer(userPlayer: UserPlayer, idx: number) {
+
+        const requestUrl = `${this.dbUrl}/players/${userPlayer.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.delete<UserPlayer>(requestUrl, httpOptions).subscribe(
+
+            (player: UserPlayer) => {
+                this.followedPlayers.splice(idx, 1);
+                window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    addFollowedTeam(newTeam: NewTeam) {
+
+        const requestUrl = `${this.dbUrl}/teams`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.post<UserTeam>(requestUrl, newTeam, httpOptions).subscribe(
+
+            (team: UserTeam) => {
+                this.followedTeams.push(team);
+                window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    deleteFollowedTeam(userTeam: UserTeam, idx: number) {
+
+        const requestUrl = `${this.dbUrl}/teams/${userTeam.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.delete<UserTeam>(requestUrl, httpOptions).subscribe(
+
+            (team: UserTeam) => {
+                this.followedTeams.splice(idx, 1);
+                window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    getWagersByUserId() {
+
+        const requestUrl = `${this.dbUrl}/wagers`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.get<UserWager[]>(requestUrl, httpOptions).subscribe(
+
+            (wagers: UserWager[]) => {
+
+                this.wagers = wagers.sort((w1: UserWager, w2: UserWager) => {
+
+                        if (w1.id > w2.id) {
+
+                            return 1;
+
+                        } else if ( w1.id < w2.id) {
+
+                            return -1;
+                        }
+
+                        return 0;
+                    }
+                );
+
+                window.sessionStorage.setItem('wagers', JSON.stringify(this.wagers));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    addNewWager(newWager: NewWager) {
+
+        const requestUrl = `${this.dbUrl}/wagers`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.post<UserWager>(requestUrl, newWager, httpOptions).subscribe(
+
+            (wager: UserWager) => {
+
+                this.wagers.push(wager);
+                window.sessionStorage.setItem('wagers', JSON.stringify(this.wagers));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    updateWager(userWager: UserWager) {
+
+        const requestUrl = `${this.dbUrl}/wagers/${userWager.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            )
+        };
+
+        this.http.put<UserWager>(requestUrl, userWager, httpOptions).subscribe(
+
+            (wager: UserWager) => {
+
+                this.wagers[this.findWagerById(wager.id)] = wager;
+                window.sessionStorage.setItem('wagers', JSON.stringify(this.wagers));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    addUser(user: UserLogin) {
+
+        const requestUrl = `${this.dbUrl}/users`;
+
+        this.http.post<User>(requestUrl, user, {observe: 'response'}).subscribe(
+            (resp: HttpResponse<User>) => {
+                this.parseLoginUser(resp);
+                this.signupStatusEmitter.emit(1);
+            },
+
+            (error) => this.signupStatusEmitter.emit(5)
+        );
+    }
+
+    /*
+        #######################
+        BROWSER SESSION METHODS
+        #######################
+    */
+
+    setLogin(value) {
+
+        window.sessionStorage.setItem('loggedIn', value);
+        this.loggedIn = value;
+        this.loginEmitter.emit(value);
+    }
+
+    getLoginStatus() {
+
+        return this.loginEmitter;
+    }
+
+    setUser(user) {
+
+        window.sessionStorage.setItem('user', JSON.stringify(user));
+        this.user = user;
+        this.userEmitter.emit(user);
+    }
+
+    setUsers(users: User[]) {
+
+        const sortedUsers: User[] = [...users].sort((u1: User, u2: User) => {
+
+            if (u1.id > u2.id) {
+
+                return 1;
+            }
+
+            if (u1.id < u2.id) {
+
+                return -1;
+            }
+
+            return 0;
+        });
+
+        window.sessionStorage.setItem('users', JSON.stringify(sortedUsers));
+        this.users = sortedUsers;
+        this.usersEmitter.emit(sortedUsers);
+    }
+
+    setToken(token) {
+
+        window.sessionStorage.setItem('token', JSON.stringify(token));
+        this.token = token;
+    }
+
+    clean() {
+
+        this.setLogin(false);
+        this.setUser(null);
+
+        this.loggedIn = false;
+        this.user = null;
     }
 }

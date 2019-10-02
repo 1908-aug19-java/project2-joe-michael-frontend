@@ -34,6 +34,7 @@ import { RosterFilterPipe } from './pipes/roster-filter.pipe';
 import { PlayerComponent } from './components/player/player.component';
 import { UpcomingLeagueFilterPipe } from './pipes/upcoming-league-filter.pipe';
 import { UserFilterPipe } from './pipes/user-filter.pipe';
+import { WagerFilterPipe } from './pipes/wager-filter.pipe';
 
 const appRoutes: Routes = [
 
@@ -166,7 +167,8 @@ const appRoutes: Routes = [
         RosterFilterPipe,
         PlayerComponent,
         UpcomingLeagueFilterPipe,
-        UserFilterPipe
+        UserFilterPipe,
+        WagerFilterPipe
     ],
 
     imports: [

@@ -39,6 +39,18 @@ export interface UserLogin {
     password: string;
 }
 
+export interface UserWager {
+
+    id: number;
+    amt: number;
+    api_game_id: number;
+    guess: number;
+    resolution: number;
+    initiating: User;
+    recieving: User;
+    accepted: boolean;
+}
+
 export interface NewPlayer {
 
     api_player_id: number;
@@ -53,4 +65,14 @@ export interface NewTeam {
     name: string;
     type: string;
     players: any[];
+}
+
+export interface NewWager {
+
+    amt: number;
+    api_game_id: number;
+    guess: number;
+    initiating: User;
+    recieving: User;
+    accepted: boolean;
 }

@@ -1,3 +1,151 @@
-<p>
-  user-wager works!
-</p>
+<div class="wager-container">
+
+    <div class="wager-header">
+
+        <p class="display-4">
+            Wagers
+        </p>
+
+    </div>
+
+    <div *ngIf="userService.wagers.length else noWagers">
+
+        <div class="wagers-nav">
+
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link lead" (click)="filterOption=0" [ngClass]="{'active': filterOption===0}">All</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link lead" (click)="filterOption=1" [ngClass]="{'active': filterOption===1}">Active</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link lead" (click)="filterOption=2" [ngClass]="{'active': filterOption===2}">Pending</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link lead" (click)="filterOption=3" [ngClass]="{'active': filterOption===3}">Finished</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="row p-0">
+
+            <div class="col-4 gen-container wager-list">
+
+                <ul class="list-group list-group-flush">
+
+                    <li *ngFor="let wager of userService.wagers | wagerFilter: filterOption" (click)="switchActiveWager(wager)" class="list-group-item lead text-dark" [ngClass]="{'active': wager.id === userService.wagers[activeWagerIdx].id}">
+                        <a class="float-left">
+                            #{{wager.api_game_id}}: {{wager.initiating.id === userService.user.id?(wager.recieving.name?wager.recieving.name:wager.recieving.email):(wager.initiating.name?wager.initiating.name:wager.initiating.email)}}
+                        </a>
+                        <a class="float-right" routerLink="/user/matchs/{{wager.api_game_id}}" routerLinkActive="active"><em class="fa fa-external-link"></em></a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="col-7 gen-container">
+
+                <div *ngIf="api.matchFixtureEmitter | async as fe" class="fixture-container">
+
+                    <div class="fixture-header">
+
+                        <p class="lead p-0 m-0 float-left">{{fe.api.fixtures[0].round}}</p>
+                        <a class="lead p-0 m-0 float-right" routerLink="/teams/{{fe.api.fixtures[0].homeTeam.team_id}}">{{fe.api.fixtures[0].homeTeam.team_name}} (Home)</a>
+
+                        <br style="clear: both" />
+
+                        <p class="lead p-0 m-0 float-left">@{{fe.api.fixtures[0].venue}}</p>
+                        <p class="lead p-0 m-0 float-right">{{fe.api.fixtures[0].status}}</p>
+
+                        <br style="clear: both" />
+
+                        <p class="lead p-0 m-0 float-left">{{fe.api.fixtures[0].event_date | date:medium}}</p>
+                        <a class="lead p-0 m-0 float-right" routerLink="/teams/{{fe.api.fixtures[0].awayTeam.team_id}}">{{fe.api.fixtures[0].awayTeam.team_name}} (Away)</a>
+
+                        <br style="clear: both" />
+
+                        <hr />
+
+                    </div>
+
+                    <div class="fixture-body">
+                        <p class="lead p-0 m-0 float-left">Initiater</p>
+                        <div *ngIf="userService.wagers[activeWagerIdx].initiating.name">
+                            <p class="lead p-0 m-0 float-right">{{userService.wagers[activeWagerIdx].initiating.name}}</p>
+                            <br style="clear: both" />
+                        </div>
+                        <p class="lead p-0 m-0 float-right">{{userService.wagers[activeWagerIdx].initiating.email}}</p>
+
+                        <br style="clear: both" />
+
+                        <p class="lead p-0 m-0 float-left">Receiver</p>
+                        <div *ngIf="userService.wagers[activeWagerIdx].recieving.name">
+                            <p class="lead p-0 m-0 float-right">{{userService.wagers[activeWagerIdx].recieving.name}}</p>
+                            <br style="clear: both" />
+                        </div>
+                        <p class="lead p-0 m-0 float-right">{{userService.wagers[activeWagerIdx].recieving.email}}</p>
+
+                        <br style="clear: both" />
+
+                        <p class="lead m-0 float-left">Wager Amount</p>
+                        <p class="lead m-0 float-right">${{userService.wagers[activeWagerIdx].amt.toFixed(2)}}</p>
+
+                        <br style="clear: both;" />
+
+                        <hr />
+
+                        <p class="lead m-0 float-left">Accepted</p>
+                        <p class="lead m-0 float-right">{{userService.wagers[activeWagerIdx].resolution?resolutionStrings[userService.wagers[activeWagerIdx].resolution]:userService.wagers[activeWagerIdx].accepted?'ACCEPTED':'PENDING'}}</p>
+
+                        <br style="clear: both;" />
+
+                        <p class="lead m-0 float-left">Bet</p>
+                        <div class="float-right" [ngSwitch]="userService.wagers[activeWagerIdx].guess">
+
+                            <p *ngSwitchCase="0" class="lead m-0 float-right">{{fe.api.fixtures[0].homeTeam.team_name}} Wins</p>
+                            <p *ngSwitchCase="1" class="lead m-0 float-right">{{fe.api.fixtures[0].awayTeam.team_name}} Wins</p>
+                            <br *ngIf="userService.wagers[activeWagerIdx].guess != 2" style="clear: both;" />
+                            <p class="lead m-0 float-right">{{guessStringEnum[userService.wagers[activeWagerIdx].guess]}}</p>
+
+                        </div>
+                    </div>
+
+                    <div class="fixture-footer">
+                        <hr />
+                        <div class="float-right">
+
+                            <div *ngIf="!userService.wagers[activeWagerIdx].accepted && userService.wagers[activeWagerIdx].recieving.id === userService.user.id else wagerAccepted">
+                                <button class="btn btn-info" (click)="userService.acceptWager(userService.wagers[activeWagerIdx].id, true)" style="margin-right:10px">Accept</button>
+                                <button class="btn btn-danger" (click)="userService.acceptWager(userService.wagers[activeWagerIdx].id, false)">Decline</button>
+                            </div>
+
+                            <ng-template #wagerAccepted>
+                                <button class="btn btn-info disabled" style="margin-right:10px">Accept</button>
+                                <button class="btn btn-danger disabled">Decline</button>
+                            </ng-template>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <ng-template #noWagers>
+
+        <p class="lead m-0">Nothing to show here :(</p>
+
+    </ng-template>
+
+</div>
