@@ -28,6 +28,7 @@ export class UserMatchComponent implements OnInit {
     wagerRecipient;
 
     wagerValid: boolean[] = [true, true, true];
+    wagerAvailable = true;
 
     finished = false;
 
@@ -41,12 +42,15 @@ export class UserMatchComponent implements OnInit {
     parseFixture(fixture: Fixture) {
 
         this.finished = fixture.statusShort === 'FT';
-        console.log(fixture);
-
         this.fixture = fixture;
     }
 
     validateForm() {
+
+        if (!this.wagerAvailable) {
+
+            return;
+        }
 
         this.wagerValid[0] = this.wagerRecipient != null;
         this.wagerValid[1] = this.wagerVictor != null;
@@ -68,10 +72,14 @@ export class UserMatchComponent implements OnInit {
         const wager = {
             amt: this.wagerAmount,
             initiating: this.userService.user,
-            recieving: this.userService.tempUsers[this.wagerRecipient - 1],
+            recieving: this.userService.findUser(this.wagerRecipient),
             api_game_id: this.fixture.fixture_id,
             accepted: false,
             resolution: 0
         };
+
+        console.log(wager);
+
+        this.wagerAvailable = false;
     }
 }

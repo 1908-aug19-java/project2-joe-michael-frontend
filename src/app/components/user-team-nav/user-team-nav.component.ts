@@ -14,6 +14,7 @@ export class UserTeamNavComponent implements OnInit, OnDestroy {
     expandedState = +window.sessionStorage.getItem('expandedState');
 
     ngOnInit() {
+
     }
 
     ngOnDestroy() {

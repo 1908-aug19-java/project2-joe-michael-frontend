@@ -1,4 +1,4 @@
-<div *ngIf="api.matchFixtureEmitter | async as mfe"class="fixture-container">
+<div *ngIf="api.matchFixtureEmitter | async as mfe"  class="fixture-container">
 
     <div class="row general-container">
         <div class="home-team-container col">
@@ -37,7 +37,7 @@
 
                 <p class="display-4">Not Started</p>
 
-                <a class="lead m-0 btn btn-outline-secondary" role="button" data-toggle="modal" data-target="#wager-modal">Make a Wager</a>
+                <a class="lead m-0 btn btn-outline-secondary" role="button" data-toggle="modal" data-target="#wager-modal" (click)="wagerAvailable=true">Make a Wager</a>
 
             </ng-template>
 
@@ -54,78 +54,79 @@
         </div>
     </div>
 
-    <div class="modal" tabindex="-1" role="dialog" id="wager-modal" (submit)="validateForm()">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
+        <div class="modal fade" tabindex="-1" role="dialog" id="wager-modal" (submit)="validateForm()">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
 
-                    <h5 class="modal-title">Make a Wager</h5>
+                        <h5 class="modal-title">Make a Wager</h5>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
 
-                </div>
+                    </div>
 
-                <div class="modal-body">
-                    
-                    <form>
+                    <div class="modal-body">
+                        
+                        <form>
 
-                        <div class="form-group">
+                            <div class="form-group">
 
-                            <label for="wager-target-field">Who to wager against?</label>
+                                <label for="wager-target-field">Who to wager against?</label>
 
-                            <select [(ngModel)]="wagerRecipient" (change)="wagerValid[0] = true" name="wager-recipient" class="form-control" id="wager-target-field" [ngClass]="{'is-invalid': !wagerValid[0]}">
+                                <select *ngIf="userService.users as users" [(ngModel)]="wagerRecipient" (change)="wagerValid[0]=true" name="wager-recipient" class="form-control" id="wager-target-field" [ngClass]="{'is-invalid': !wagerValid[0]}">
 
-                                <option *ngFor="let user of userService.tempUsers | userFilter: userService.user.id" [value]="user.id">{{user.firstname}} {{user.lastname}}</option>
+                                    <option *ngFor="let user of users | userFilter: userService.user.id" [value]="user.id">{{(user.name)?(user.name):(user.email)}}</option>
 
-                            </select>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label for="wager-victor-field">Who do you think will win?</label>
-
-                            <select [(ngModel)]="wagerVictor" (change)="wagerValid[1] = true" name="wager-victor" class="form-control" id="wager-victor-field" [ngClass]="{'is-invalid': !wagerValid[1]}">
-
-                                <option value="1">Home ({{mfe.api.fixtures[0].homeTeam.team_name}})</option>
-                                <option value="2">Draw</option>
-                                <option value="0">Away ({{mfe.api.fixtures[0].awayTeam.team_name}})</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label for="wager-amount-field">How much to wager?</label>
-
-                            <div class="input-group mb-3">
-
-                                <div class="input-group-prepend">
-
-                                    <span class="input-group-text">$</span>
-
-                                </div>
-
-                                <input [(ngModel)]="wagerAmount" (change)="wagerValid[2] = true" name="wager-amount" type="number" min="0" step="0.01" class="form-control" aria-label="Amount" [ngClass]="{'is-invalid': !wagerValid[2]}">
+                                </select>
 
                             </div>
 
-                        </div>
+                            <div class="form-group">
 
-                    </form>
+                                <label for="wager-victor-field">Who do you think will win?</label>
 
-                </div>
+                                <select [(ngModel)]="wagerVictor" (change)="wagerValid[1] = true" name="wager-victor" class="form-control" id="wager-victor-field" [ngClass]="{'is-invalid': !wagerValid[1]}">
 
-                <div class="modal-footer">
+                                    <option value="1">Home ({{mfe.api.fixtures[0].homeTeam.team_name}})</option>
+                                    <option value="2">Draw</option>
+                                    <option value="0">Away ({{mfe.api.fixtures[0].awayTeam.team_name}})</option>
 
-                    <button type="button" class="btn btn-info" (click)="validateForm()" type="submit">Send Wager</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </select>
 
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="wager-amount-field">How much to wager?</label>
+
+                                <div class="input-group mb-3">
+
+                                    <div class="input-group-prepend">
+
+                                        <span class="input-group-text">$</span>
+
+                                    </div>
+
+                                    <input [(ngModel)]="wagerAmount" (change)="wagerValid[2] = true" name="wager-amount" type="number" min="0" step="0.01" class="form-control" aria-label="Amount" [ngClass]="{'is-invalid': !wagerValid[2]}">
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-info" (click)="validateForm()" type="submit" [ngClass]="{'disabled': !wagerAvailable}">Send Wager</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>  
+
 </div>
