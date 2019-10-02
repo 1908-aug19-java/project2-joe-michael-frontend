@@ -164,9 +164,6 @@ export class UserService {
 
         const token = resp.headers.get('token');
         const user: User = resp.body;
-        const requestUrl = `${this.dbUrl}/users`;
-
-        console.log(resp);
 
         this.initUser(user);
 
@@ -223,7 +220,7 @@ export class UserService {
 
     setUsers(users: User[]) {
 
-        const sortedUsers: User[] = users.sort((u1: User, u2: User) => {
+        const sortedUsers: User[] = [...users].sort((u1: User, u2: User) => {
 
             if (u1.id > u2.id) {
 

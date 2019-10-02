@@ -8,7 +8,7 @@ export class UserFilterPipe implements PipeTransform {
 
   transform(users: User[], id: number): User[] {
 
-    return users.filter((user: User) => !(user.id === id));
+    return users.filter((user: User) => user.id !== id);
   }
 
 }
