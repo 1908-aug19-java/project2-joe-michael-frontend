@@ -427,7 +427,7 @@ export class UserService {
             }
         };
 
-        this.http.put<User>(requestUrl, this.user, this.makeHeaders(this.user.id, this.token)).subscribe(
+        this.http.put<User>(requestUrl, this.user, httpOptions).subscribe(
 
             (user: User) => {
 

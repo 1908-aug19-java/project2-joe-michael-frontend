@@ -35,17 +35,13 @@ a {
 
     margin-top: 20px;
     padding: 20px;
+    overflow: auto;
+    max-height: 70vh;
 }
 
 .league-drop {
 
     cursor: pointer;
-}
-
-.teams-body {
-
-    overflow: auto;
-    max-height: 70vh;
 }
 
 img {
