@@ -2,7 +2,7 @@
 
     <div class="navbar-header w-100 side-navbar-name">
 
-        <button *ngIf="userService.user.name==null else noName" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
+        <button *ngIf="userService.user.name==null else noName" class="btn btn-warning col-10 offset-1 side-navbar-finish-button" (click)="finishAccount()">
         Finish Account Creation
         </button>
 
