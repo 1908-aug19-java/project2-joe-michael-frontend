@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { User } from '../../interfaces/user';
+import { User, UserTeam, NewTeam } from '../../interfaces/user';
 
 @Component({
     selector: 'app-user-team-nav',
@@ -9,17 +9,32 @@ import { User } from '../../interfaces/user';
 })
 export class UserTeamNavComponent implements OnInit {
 
-    constructor(private userService: UserService) { }
+    constructor(public userService: UserService) { }
 
-    user: User = this.userService.user;
-
-    userEmitter;
-
-    expandedState = 0;
-    userFantasyTeams: string[] = ['Team 1', 'Team 2', 'Team 3'];
+    expandedState = +window.sessionStorage.getItem('expandedState');
 
     ngOnInit() {
 
-        this.userEmitter = this.userService.getUser().subscribe(item => this.user = item);
+    }
+
+    createNewFantasyTeam() {
+
+        const placeholderName = `Fantasy Team #${this.userService.fantasyTeams.length + 1}`;
+        const newTeam: NewTeam = {
+
+            api_team_id: 0,
+            api_league_id: 0,
+            name: placeholderName,
+            type: 'FANTASY',
+            players: []
+        };
+
+        this.userService.addFantasyTeam(newTeam);
+    }
+
+    setExpand(state: number) {
+
+        this.expandedState === state ? this.expandedState = 0 : this.expandedState = state;
+        window.sessionStorage.setItem('expandedState', this.expandedState.toString());
     }
 }

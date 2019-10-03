@@ -1,0 +1,54 @@
+.teams-container {
+
+    margin: 20px;
+    margin-right: 50px;
+}
+
+a {
+    color: inherit;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+
+    max-height: 45vh;
+    overflow-y: auto;
+}
+
+.league-dropdown {
+
+    min-width: 25vw;
+}
+
+.dropdown-item.active {
+
+    background-color: #F1F1F1;
+    border-color: #DFDFDF;
+}
+
+.dropdown-item:active {
+
+    background-color: #F6F8FA;
+}
+
+.teams-body {
+
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.league-drop {
+
+    cursor: pointer;
+}
+
+.teams-body {
+
+    overflow: auto;
+    max-height: 70vh;
+}
+
+img {
+
+    cursor: pointer;
+}

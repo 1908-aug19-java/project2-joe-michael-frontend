@@ -1,4 +1,62 @@
-.placeholder{
+.wager-container {
 
-    background-color:#F6F8FA;
+    margin: 20px;
+    margin-right: 50px;
+}
+
+.wager-header {
+
+    padding: 20px;
+    min-height: 168px;
+}
+
+.gen-container {
+
+    border: 1px solid #DEE2E6!important;
+    min-height: 62vh;
+    max-height: 62vh;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 0px;
+}
+
+.nav {
+
+    margin: 5px;
+    margin-bottom: 0px;
+}
+
+.nav > li > a {
+
+    font-size: 1.4vw;
+}
+
+a {
+
+    cursor: pointer;
+    color: inherit;
+}
+
+.wager-list {
+
+    overflow-y: scroll;
+}
+
+.list-group-item.active {
+
+    background-color: #F1F1F1;
+    border-color: #DFDFDF;
+}
+
+.list-group-item:active {
+
+    background-color: #F6F8FA;
+}
+
+.fixture-footer {
+
+    position: absolute;
+    bottom: 0;
+    height: 90px;
+    width: 96%;
 }

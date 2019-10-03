@@ -2,13 +2,17 @@
 
     <div class="navbar-header w-100 side-navbar-name">
 
-        <button *ngIf="user===null || user.firstname===''" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
+        <button *ngIf="userService.user.name==null else noName" class="btn btn-warning col-10 offset-1 side-navbar-finish-button">
         Finish Account Creation
         </button>
 
-        <a *ngIf="user!==null && user.firstname!==''" class="navbar-brand">
-        {{user.firstname + " " + user.lastname}}
-        </a>
+        <ng-template #noName>
+
+            <a *ngIf="userService.user.name" class="navbar-brand">
+            {{userService.user.name}}
+            </a>
+
+        </ng-template>
 
     </div>
 
@@ -20,49 +24,43 @@
             </li>
 
             <li class="nav-item">
-                <a (click)="expandedState===1?expandedState=0:expandedState=1" class="nav-link active" id="navbar-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===1}"></span>&nbsp;&nbsp;Fantasy Teams</a>
+                <a (click)="setExpand(1)" class="nav-link active" id="navbar-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===1}"></span>&nbsp;&nbsp;Fantasy Teams</a>
             </li>
 
             <ul *ngIf="expandedState===1" class="list-no-bullet">
 
-                <li *ngFor="let name of userFantasyTeams" class="nav-item">
-                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">{{name}}</a>
+                <li *ngFor="let team of userService.fantasyTeams" class="nav-item">
+                    <a routerLink="/user/fantasy-teams/{{team.id}}" routerLinkActive="active" class="nav-link p-0">{{team.name}}</a>
                 </li>
 
-                <li class="nav-item">
-                    <a routerLink="fantasy-teams" routerLinkActive="active" class="nav-link p-0">Create a new team...</a>
+                <hr *ngIf="userService.fantasyTeams.length > 0 && userService.fantasyTeams.length < 3" />
+
+                <li *ngIf="!(userService.user.acct_level === 0 && userService.fantasyTeams.length >= 3)" class="nav-item">
+                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" (click)="createNewFantasyTeam()" class="nav-link p-0">Create a new team...</a>
                 </li>
 
             </ul>
 
             <li class="nav-item">
-                <a (click)="expandedState===2?expandedState=0:expandedState=2" class="nav-link active" id="navbar-followed-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===2}"></span>&nbsp;&nbsp;Followed Teams</a>
+                <a (click)="setExpand(2)" class="nav-link active" id="navbar-followed-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===2}"></span>&nbsp;&nbsp;Followed Teams</a>
             </li>
 
             <ul *ngIf="expandedState===2" class="list-no-bullet">
 
-                <li *ngFor="let team of userFollowedTeams" class="nav-item">
-                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">{{team}}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a routerLink="followed-teams" routerLinkActive="active" class="nav-link p-0">Follow a new team...</a>
+                <li *ngFor="let obj of userService.followedTeams" class="nav-item">
+                    <a routerLink="/teams/{{obj.api_team_id}}" routerLinkActive="active" class="nav-link p-0">{{obj.name}}</a>
                 </li>
 
             </ul>
 
             <li class="nav-item">
-                <a (click)="expandedState===3?expandedState=0:expandedState=3" class="nav-link active" id="navbar-followed-players-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===3}"></span>&nbsp;&nbsp;Followed Players</a>
+                <a (click)="setExpand(3)" class="nav-link active" id="navbar-followed-players-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===3}"></span>&nbsp;&nbsp;Followed Players</a>
             </li>
 
             <ul *ngIf="expandedState===3" class="list-no-bullet">
 
-                <li *ngFor="let player of userFollowedPlayers" class="nav-item">
-                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">{{player}}</a>
-                </li>
-
-                <li class="nav-item">
-                    <a routerLink="followed-players" routerLinkActive="active" class="nav-link p-0">Follow a new player...</a>
+                <li *ngFor="let player of userService.followedPlayers" class="nav-item">
+                    <a routerLink="/players/{{player.api_player_id}}" routerLinkActive="active" class="nav-link p-0">{{player.name}}</a>
                 </li>
 
             </ul>
@@ -70,7 +68,7 @@
             <li class="nav-divider"></li>
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/user/matches" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matches</a>
+                <a class="nav-link" routerLink="/user/matchs" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matchs</a>
             </li>
 
             <li class="nav-item">

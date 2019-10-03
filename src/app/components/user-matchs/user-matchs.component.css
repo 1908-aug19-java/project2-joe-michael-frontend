@@ -1,9 +1,8 @@
 .list-group{
 
-    max-height: 80vh;
+    max-height: 70vh;
     margin-bottom: 10px;
     overflow-y: scroll;
-    background: white!important;
 }
 
 .list-group-item-active { 
@@ -25,10 +24,10 @@
 .div-versus {
 
     position: absolute;
-    left: calc(50% - 150px);
+    left: calc(50% - 250px);
 
     height: 64px;
-    width: 300px;
+    width: 500px;
 }
 
 .list-group-item {
@@ -60,4 +59,16 @@
 a {
 
     color: inherit;
+    cursor: pointer;
+}
+
+.upcoming-header {
+
+    margin: 20px;
+}
+
+.leagues-dropdown {
+
+    max-height: 40vh;
+    overflow-y: scroll;
 }

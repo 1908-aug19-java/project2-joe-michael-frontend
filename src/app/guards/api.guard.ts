@@ -14,15 +14,7 @@ export class ApiGuard implements CanActivate {
 
     canActivate() {
 
-        if (window.sessionStorage.getItem('seasons') === null) {
-
-            this.api.getSeasons();
-        }
-
-        if (window.sessionStorage.getItem('fixtures') === null) {
-
-            this.api.getFixturesByDate(1);
-        }
+        this.api.getFixturesByDate();
 
         return true;
     }

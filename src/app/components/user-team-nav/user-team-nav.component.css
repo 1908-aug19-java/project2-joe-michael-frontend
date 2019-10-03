@@ -13,11 +13,6 @@
     margin-bottom: 10px;
 }
 
-.list-no-bullet {
-
-    list-style: none;
-}
-
 li { 
 
     cursor: pointer;
@@ -43,4 +38,18 @@ li {
     margin-top: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid black!important;
+}
+
+.list-no-bullet {
+
+    list-style: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 410px;
+    padding-left: 20px!important;
+}
+
+.list-no-bullet > li {
+
+    padding-left: none;
 }

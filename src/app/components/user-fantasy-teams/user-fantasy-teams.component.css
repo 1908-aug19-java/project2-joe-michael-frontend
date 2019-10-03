@@ -1,4 +1,44 @@
-.placeholder{
+.fantasy-container {
 
-    background-color:#F6F8FA;
+    margin: 20px;
+    margin-right: 50px;
+    padding-bottom: 0px;
+}
+
+.fantasy-header {
+
+    padding: 20px;
+    min-height: 168px;
+    padding-bottom: 0px;
+}
+
+.gen-container {
+
+    border: 1px solid #DEE2E6!important;
+    min-height: 62vh;
+    max-height: 62vh;
+    margin: 20px;
+    margin-top: 0px;
+    padding: 0px;
+}
+
+div.form-group > input[readonly]:focus {
+
+    outline: none;
+}
+
+div.form-group > input[readonly=false]:focus {
+    outline-color: #DEE2E6;
+}
+
+.list-group {
+
+    overflow-y: scroll;
+    height: 100%;
+}
+
+a {
+
+    cursor: pointer;
+    color: inherit;
 }

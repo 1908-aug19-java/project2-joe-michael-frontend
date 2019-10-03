@@ -5,10 +5,165 @@
 
 </div>
 
-<div class = "jumbotron jumbotron-fluid vh-100 col-8 p-0 info-div">
+<div class = "jumbotron jumbotron-fluid vh-100 col-10 p-0 info-div">
 
-    <p>Teams Component</p>
-</div>
+    <div class="teams-container">
 
-<div class="col-2 p-0 bg-light">
+        <div class="teams-header">
+
+            <p class="display-4">Find Teams</p>
+
+        </div>
+
+        <ul class="nav nav-tabs">
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link lead" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Season: {{seasons[activeSeasonIdx]}}</a>
+
+                <div class="dropdown-menu">
+
+                    <a *ngFor="let season of seasons; let i = index" class="dropdown-item" (click)="switchActiveSeason(i)" [ngClass]="{'active': activeSeasonIdx === i}">{{season}}</a>
+
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link lead" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{countries[activeCountryIdx].country}}</a>
+
+                <div class="dropdown-menu">
+
+                    <a *ngFor="let country of countries; let i = index" class="dropdown-item" (click)="switchActiveCountry(i)" [ngClass]="{'active': activeCountryIdx === i}">{{country.country}}</a>
+
+                </div>
+            </li>
+
+            <li *ngIf="api.searchLeaguesEmitter | async as sle" class="nav-item dropdown">
+
+                <div *ngIf="sle.api.results else noResults">
+
+                    <a class="nav-link lead" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{sle.api.leagues[activeLeagueIdx].name}}: {{sle.api.leagues[activeLeagueIdx].country}}</a>
+
+                    <div class="dropdown-menu league-dropdown">
+                        <div *ngFor="let league of sle.api.leagues; let i = index" class="dropdown-item league-drop" (click)="switchActiveLeague(i)" [ngClass]="{'active': activeLeagueIdx === i}">
+
+                            <a class="dropdown-item" [ngClass]="{'active': activeLeagueIdx === i}">
+                                <p class="float-left text-dark">{{league.name}}</p>
+                                <small class="float-right text-muted">{{league.country}}</small>
+                            </a>
+
+                            <br style="clear: both" />
+
+                        </div>
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div *ngIf="api.searchTeamsEmitter | async as ste else noResults" class="teams-body">
+
+            <div *ngFor="let team of ste.api.teams; let i = index" class="teams-container">
+                
+                <div *ngIf="i % 6 === 0" class="team-row row align-self-start">
+
+                    <div *ngIf="ste.api.teams[i]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i].team_id}}" [src]="ste.api.teams[i].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i].team_id}}" class="lead">{{ste.api.teams[i].name}}</a>
+
+                    </div>
+
+                    <div *ngIf="ste.api.teams[i + 1]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i + 1], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i + 1]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i + 1])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i + 1].team_id}}" [src]="ste.api.teams[i + 1].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i + 1].team_id}}" class="lead">{{ste.api.teams[i + 1].name}}</a>
+
+                    </div>
+
+                    <div *ngIf="ste.api.teams[i + 2]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i + 2], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i + 2]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i + 2])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i + 2].team_id}}" [src]="ste.api.teams[i + 2].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i + 2].team_id}}" class="lead ">{{ste.api.teams[i + 2].name}}</a>
+
+                    </div>
+
+                    <div *ngIf="ste.api.teams[i + 3]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i + 3], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i + 3]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i + 3])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i + 3].team_id}}" [src]="ste.api.teams[i + 3].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i + 3].team_id}}" class="lead">{{ste.api.teams[i + 3].name}}</a>
+
+                    </div>
+
+                    <div *ngIf="ste.api.teams[i + 4]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i + 4], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i + 4]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i + 4])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i + 4].team_id}}" [src]="ste.api.teams[i + 4].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i + 4].team_id}}" class="lead">{{ste.api.teams[i + 4].name}}</a>
+
+                    </div>
+
+                    <div *ngIf="ste.api.teams[i + 5]" class="team-unit col-2 align-self-start text-center">
+
+                        <div class="follow-icon">
+                            <a (click)="userService.followTeam(ste.api.teams[i + 5], api.leagues)" class="m-0 p-0"><em class="fa fa-2x" [ngClass] = "{'fa-bookmark': userService.isTeamFollowed(ste.api.teams[i + 5]!=-1), 'fa-bookmark-o': userService.isTeamFollowed(ste.api.teams[i + 5])==-1}"></em></a>
+                        </div>
+
+                        <img routerLink="/teams/{{ste.api.teams[i + 5].team_id}}" [src]="ste.api.teams[i + 5].logo" alt="..." class="team-logo-image img-thumbnail">
+
+                        <br />
+
+                        <a routerLink="/teams/{{ste.api.teams[i + 5].team_id}}" class="lead">{{ste.api.teams[i + 5].name}}</a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <ng-template #noResults>
+
+                <p>Nothing Here</p>
+
+            </ng-template>
+
+        </div>
+
+    </div>
 </div>

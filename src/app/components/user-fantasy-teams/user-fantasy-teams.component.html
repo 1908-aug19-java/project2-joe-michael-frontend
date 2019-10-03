@@ -1,3 +1,61 @@
-<p>
-  user-fantasy-teams works!
-</p>
+<div *ngIf="teamIdx !== -1 else noTeam" class="fantasy-container">
+
+    <div class="fantasy-header">
+
+        <form>
+            <div class="form-group m-0">
+                <input type="text m-0 p-0" [(ngModel)]="teamName" [readonly]="inputDisabled" (focusout)="inputDisabled?'':saveName()" (dblclick)="inputDisabled=false" (keyup.enter)="inputDisabled?'':saveName()" class="form-control-plaintext display-4" name="teamName">
+            </div>
+        </form>
+
+        <a class="lead" (click)="userService.deleteFantasyTeam(userService.fantasyTeams[teamIdx], teamIdx); teamIdx=-1"><em class="fa fa-trash-o fa-2x"></em> &nbsp;</a>
+
+    </div>
+
+    <div>
+        <div style="margin-right: 20px">
+            <p class="lead float-right p-0">{{userService.fantasyTeams[teamIdx].players.length}}/14</p>
+        </div>
+
+        <br style="clear: both" />
+
+        <div class="row p-0">
+
+            <div class="col-3 gen-container wager-list">
+
+                <ul class="list-group">
+
+                    <li *ngFor="let player of userService.followedPlayers | fantasyFilter: userService.fantasyTeams[teamIdx].players" (dragstart)="drag($event, player)" class="list-group-item" [draggable]="userService.fantasyTeams[teamIdx].players.length < 14">
+                        <p class="lead float-left m-0">{{player.name}}</p>
+                        <a class="lead float-right" routerLink="/players/{{player.api_player_id}}"><em class="fa fa-external-link"></em></a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="col-8 gen-container" (dragover)="allowDrop($event)" (drop)="drop($event)">
+
+                <ul class="list-group">
+
+                    <li *ngFor="let player of userService.fantasyTeams[teamIdx].players" class="list-group-item">
+                        <a class="lead float-left" (click)="userService.deleteFantasyPlayer(userService.fantasyTeams[teamIdx], player)"><em class="fa fa-times"></em> &nbsp;</a>
+                        <p class="lead float-left m-0">{{player.name}}</p>
+                        <a class="lead float-right" routerLink="/players/{{player.api_player_id}}"><em class="fa fa-external-link"></em></a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<ng-template #noTeam>
+
+    <p class="lead m-0">Nothing to show here :(</p>
+
+</ng-template>

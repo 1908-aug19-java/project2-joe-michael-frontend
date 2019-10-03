@@ -1,0 +1,39 @@
+.player-information-div {
+
+    margin: 20px;
+    margin-right: 50px;
+    min-height: 168px;
+}
+
+a {
+
+    cursor: pointer;
+    color: inherit;
+}
+
+.dropdown-menu > .active {
+
+    background-color: #F1F1F1;
+}
+
+.dropdown-menu > .dropdown-item:active {
+
+    background-color: #F6F8FA;
+}
+
+.navbar .nav {
+
+    white-space: nowrap; 
+}
+
+.responsive-tab {
+
+    font-size: 1vw;
+}
+
+.player-season-statistics > div {
+
+    border: 1px solid #DEE2E6!important;
+    min-height: 55vh;
+    margin: 20px;
+}

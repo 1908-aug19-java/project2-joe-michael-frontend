@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-2 bg-light user-nav-col">
+
+        <app-user-team-nav *ngIf="loginStatus===true"></app-user-team-nav>
+
+    </div>
+
+    <div class="jumbotron jumbotron-fluid vh-100 col-10 p-0 info-div">
+
+        <div *ngIf="api.playerEmitter | async as pe" class="player-information-div">
+            <p class="display-4 m-0">{{pe.api.players[pe.api.results - 1].firstname}} {{pe.api.players[pe.api.results - 1].lastname}}</p>
+            <a routerLink="/teams/{{pe.api.players[1].team_id}}" class="lead m-0">&nbsp;{{pe.api.players[1].league}}: {{pe.api.players[1].team_name}}</a>
+            <p class="lead m-0">&nbsp;{{pe.api.players[1].position}}</p>
+            <div>
+                <span class="follow-icon">
+
+                    <a (click)="userService.followPlayer(pe.api.players[1])">&nbsp;
+                        <em class="fa fa-2x" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(pe.api.players[1])!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(pe.api.players[1])==-1}"></em>
+                    </a>
+                </span>
+
+                &nbsp;
+
+                <span class="dropright">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <em class="fa fa-2x fa-list"></em>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <h6 class="dropdown-header">Add to fantasy team...</h6>
+                        <div class="dropdown-divider"></div>
+
+                        <a *ngFor="let team of userService.fantasyTeams; let i = index" class="dropdown-item" [ngClass]="{'disabled text-muted': userService.findFantasyPlayerByApiId(pe.api.players[1].player_id, i) !== -1}" (click)="userService.findFantasyPlayerByApiId(pe.api.players[1].player_id, i) !== -1 ? '' : addFantasyPlayer(i, pe.api.players[1])">{{team.name}}</a>
+                    </div>
+                </span>
+            </div>
+        </div>
+
+        <div *ngIf="sortedPlayerEmitter | async as spe" class="player-statistics-container">
+
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item dropright">
+                    <a class="nav-link responsive-tab" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{activeLeague.name}}</a>
+
+                    <div class="dropdown-menu">
+
+                        <a *ngFor="let player of spe; let i = index" (click)="switchLeague(player[0], i)" class="dropdown-item" [ngClass]="{'active': activeLeague.idx === i}">{{player[0].league}}</a>
+
+                    </div>
+                </li>
+
+                <li *ngFor="let season of spe[activeLeague.idx]; let i = index" class="nav-item">
+
+                    <a class="nav-link responsive-tab" (click)="activeSeason={name: season.season, idx: i}" [ngClass]="{'active': activeSeason.idx === i}">{{season.season}}</a>
+
+                </li>
+            </ul>
+
+            <div class="player-season-statistics row m-0 p-0">
+
+                <div class="col-3 general-information">
+
+                    <div>
+                        <p class="lead m-0 p-0 float-left">Birth Date</p>
+                        <p class="lead m-0 p-0 float-right">{{spe[activeLeague.idx][activeSeason.idx].birth_date}}</p>
+                    </div>
+
+                    <br style="clear: both" />
+
+                    <div>
+                        <p class="lead m-0 p-0 float-left">Nationality</p>
+                        <p class="lead m-0 p-0 float-right">{{spe[activeLeague.idx][activeSeason.idx].nationality}}</p>
+                    </div>
+
+                    <br style="clear: both" />
+
+                    <div>
+                        <p class="lead m-0 p-0 float-left">Team Name</p>
+                        <p class="lead m-0 p-0 float-right">{{spe[activeLeague.idx][activeSeason.idx].team_name}}</p>
+                    </div>
+
+                    <br style="clear: both" />
+
+                    <div>
+                        <p class="lead m-0 p-0 float-left">Rating</p>
+                        <p class="lead m-0 p-0 float-right">{{spe[activeLeague.idx][activeSeason.idx].rating}}</p>
+                    </div>
+
+                </div>
+
+                <div class="col-8">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
