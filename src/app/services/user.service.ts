@@ -394,6 +394,7 @@ export class UserService {
         );
     }
 
+
     addUser(user: UserLogin) {
 
         const requestUrl = `${this.dbUrl}/users`;
@@ -405,6 +406,35 @@ export class UserService {
             },
 
             (error) => this.signupStatusEmitter.emit(5)
+        );
+    }
+
+    updateUser() {
+
+        const requestUrl = `${this.dbUrl}/users/${this.user.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.put<User>(requestUrl, this.user, this.makeHeaders(this.user.id, this.token)).subscribe(
+
+            (user: User) => {
+
+                window.sessionStorage.setItem('user', JSON.stringify(this.user));
+            },
+
+            error => console.log(error)
         );
     }
 
