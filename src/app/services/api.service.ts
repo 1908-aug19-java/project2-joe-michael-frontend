@@ -32,6 +32,8 @@ export class ApiService {
     matchFixture: Fixtures = JSON.parse(window.sessionStorage.getItem('matchFixture'));
     player: Players = JSON.parse(window.sessionStorage.getItem('player'));
     prediction: Prediction = JSON.parse(window.sessionStorage.getItem('prediction'));
+    searchLeagues: Leagues = JSON.parse(window.sessionStorage.getItem('searchLeagues'));
+    searchTeams: Teams = JSON.parse(window.sessionStorage.getItem('searchTeams'));
 
     validationTeam: Teams;
     validationLeague: League;
@@ -48,6 +50,8 @@ export class ApiService {
     @Output() matchFixtureEmitter: EventEmitter<Fixtures> = new EventEmitter();
     @Output() playerEmitter: EventEmitter<Players> = new EventEmitter();
     @Output() predictionEmitter: EventEmitter<Prediction> = new EventEmitter();
+    @Output() searchLeaguesEmitter: EventEmitter<Leagues> = new EventEmitter();
+    @Output() searchTeamsEmitter: EventEmitter<Teams> = new EventEmitter();
 
     httpOptions = {
 
@@ -178,6 +182,38 @@ export class ApiService {
     resendLeagues() {
 
         this.setLeagues(this.leagues);
+    }
+
+    getSearchLeagues(country: string, season: number) {
+
+        const requestUrl = `${this.url}/leagues/country/${country}/${season}`;
+
+        this.http.get<Leagues>(requestUrl, this.httpOptions).subscribe(
+            (leagues: Leagues) => this.setSearchLeagues(leagues)
+        );
+    }
+
+    setSearchLeagues(leagues: Leagues) {
+
+        window.sessionStorage.setItem('searchLeagues', JSON.stringify(leagues));
+        this.searchLeagues = leagues;
+        this.searchLeaguesEmitter.emit(leagues);
+    }
+
+    getSearchTeams(league: number) {
+
+        const requestUrl = `${this.url}/teams/league/${league}`;
+
+        this.http.get<Teams>(requestUrl, this.httpOptions).subscribe(
+            (teams: Teams) => this.setSearchTeams(teams)
+        );
+    }
+
+    setSearchTeams(teams: Teams) {
+
+        window.sessionStorage.setItem('searchTeams', JSON.stringify(teams));
+        this.searchTeams = teams;
+        this.searchTeamsEmitter.emit(teams);
     }
 
     getSeasonStatistics(league: number, team: number) {
