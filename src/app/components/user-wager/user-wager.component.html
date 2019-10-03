@@ -122,7 +122,7 @@
                         <hr />
                         <div class="float-right">
 
-                            <div *ngIf="!userService.wagers[activeWagerIdx].accepted && userService.wagers[activeWagerIdx].recieving.id === userService.user.id else wagerAccepted">
+                            <div *ngIf="userService.wagers[activeWagerIdx].resolution !== 4 && !userService.wagers[activeWagerIdx].accepted && userService.wagers[activeWagerIdx].recieving.id === userService.user.id else wagerAccepted">
                                 <button class="btn btn-info" (click)="userService.acceptWager(userService.wagers[activeWagerIdx].id, true)" style="margin-right:10px">Accept</button>
                                 <button class="btn btn-danger" (click)="userService.acceptWager(userService.wagers[activeWagerIdx].id, false)">Decline</button>
                             </div>

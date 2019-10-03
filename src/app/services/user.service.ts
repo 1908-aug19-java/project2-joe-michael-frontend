@@ -150,6 +150,19 @@ export class UserService {
         return -1;
     }
 
+    findFantasyTeamById(id: number): number {
+
+        for (const obj of this.fantasyTeams) {
+
+            if (obj.id === id) {
+
+                return this.fantasyTeams.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
     acceptWager(id: number, res: boolean) {
 
         const updatedWager: UserWager = this.wagers[this.findWagerById(id)];
@@ -453,6 +466,35 @@ export class UserService {
         );
     }
 
+    addFantasyTeam(newTeam: NewTeam) {
+
+        const requestUrl = `${this.dbUrl}/teams`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.post<UserTeam>(requestUrl, newTeam, httpOptions).subscribe(
+
+            (team: UserTeam) => {
+                this.fantasyTeams.push(team);
+                window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
     getWagersByUserId() {
 
         const requestUrl = `${this.dbUrl}/wagers`;
@@ -475,7 +517,7 @@ export class UserService {
 
             (wagers: UserWager[]) => {
 
-                this.wagers = wagers.sort((w1: UserWager, w2: UserWager) => {
+                this.wagers = [...wagers].sort((w1: UserWager, w2: UserWager) => {
 
                         if (w1.id > w2.id) {
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { User } from '../../interfaces/user';
+import { User, UserTeam, NewTeam } from '../../interfaces/user';
 
 @Component({
     selector: 'app-user-team-nav',
@@ -20,5 +20,21 @@ export class UserTeamNavComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
 
         window.sessionStorage.setItem('expandedState', this.expandedState.toString());
+    }
+
+    createNewFantasyTeam() {
+
+        const placeholderName = `Fantasy Team #${this.userService.fantasyTeams.length + 1}`;
+        
+        const newTeam: NewTeam = {
+
+            api_team_id: 0,
+            api_league_id: 0,
+            name: placeholderName,
+            type: "FANTASY",
+            players: []
+        }
+
+        this.userService.addFantasyTeam(newTeam);
     }
 }

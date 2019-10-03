@@ -1,4 +1,30 @@
-.placeholder{
+.fantasy-container {
 
-    background-color:#F6F8FA;
+    margin: 20px;
+    margin-right: 50px;
+}
+
+.fantasy-header {
+
+    padding: 20px;
+    min-height: 168px;
+}
+
+.gen-container {
+
+    border: 1px solid #DEE2E6!important;
+    min-height: 62vh;
+    max-height: 62vh;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 60px;
+}
+
+div.form-group > input[readonly]:focus {
+
+    outline: none;
+}
+
+div.form-group > input[readonly=false]:focus {
+    outline-color: #DEE2E6;
 }

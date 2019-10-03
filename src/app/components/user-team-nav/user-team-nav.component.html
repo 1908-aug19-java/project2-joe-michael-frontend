@@ -33,10 +33,10 @@
                     <a routerLink="/user/fantasy-teams/{{team.id}}" routerLinkActive="active" class="nav-link p-0">{{team.name}}</a>
                 </li>
 
-                <hr />
+                <hr *ngIf="userService.fantasyTeams.length > 0 && userService.fantasyTeams.length < 3" />
 
-                <li class="nav-item">
-                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" class="nav-link p-0">Create a new team...</a>
+                <li *ngIf="!(userService.user.acct_level === 0 && userService.fantasyTeams.length >= 3)" class="nav-item">
+                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" (click)="createNewFantasyTeam()" class="nav-link p-0">Create a new team...</a>
                 </li>
 
             </ul>
