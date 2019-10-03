@@ -409,10 +409,9 @@ export class UserService {
         );
     }
 
-    updateUser(){
-        const requestUrl = `${this.dbUrl}/users/${this.user.id}`
-        console.log("here")
+    updateUser() {
 
+        const requestUrl = `${this.dbUrl}/users/${this.user.id}`;
         const httpOptions = {
 
             headers: new HttpHeaders(

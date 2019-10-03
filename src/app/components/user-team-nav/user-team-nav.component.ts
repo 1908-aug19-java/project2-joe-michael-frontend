@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User, UserTeam, NewTeam } from '../../interfaces/user';
-import {Router} from "@angular/router"
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-user-team-nav',
@@ -18,13 +18,9 @@ export class UserTeamNavComponent implements OnInit {
 
     }
 
-    ngOnDestroy() {
+    finishAccount() {
 
-        window.sessionStorage.setItem('expandedState', this.expandedState.toString());
-    }
-
-    finishAccount(){
-        this.router.navigate(['user/home'])
+        this.router.navigate(['user/home']);
     }
 
     createNewFantasyTeam() {
