@@ -15,7 +15,7 @@ import { Leagues, League } from '../../interfaces/leagues';
 })
 export class TeamsComponent implements OnInit {
 
-    constructor(private userService: UserService, private api: ApiService) { }
+    constructor(private userService: UserService, public api: ApiService) { }
 
     loginSub;
     loginStatus: boolean = this.userService.loggedIn;

@@ -62,7 +62,7 @@
             </li>
         </ul>
 
-        <div *ngIf="api.searchTeamsEmitter | async as ste else noResults" class="teams-body">
+        <div *ngIf="api.searchTeamsEmitter | async as ste" class="teams-body">
 
             <div *ngFor="let team of ste.api.teams; let i = index" class="teams-container">
                 
