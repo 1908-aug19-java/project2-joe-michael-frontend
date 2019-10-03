@@ -163,6 +163,19 @@ export class UserService {
         return -1;
     }
 
+    findFantasyPlayerById(id: number, teamIdx: number): number {
+
+        for (const obj of this.fantasyTeams[teamIdx].players) {
+
+            if (obj.id === id) {
+
+                return this.fantasyTeams[teamIdx].players.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
     acceptWager(id: number, res: boolean) {
 
         const updatedWager: UserWager = this.wagers[this.findWagerById(id)];
@@ -264,6 +277,22 @@ export class UserService {
                 this.fantasyTeams.push(team);
             }
         }
+
+        this.fantasyTeams.sort((t1: UserTeam, t2: UserTeam) => {
+
+                if (t1.id > t2.id) {
+
+                    return 1;
+                }
+
+                if (t1.id < t2.id) {
+
+                    return -1;
+                }
+
+                return 0;
+            }
+            );
 
         window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
         window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
@@ -488,6 +517,131 @@ export class UserService {
 
             (team: UserTeam) => {
                 this.fantasyTeams.push(team);
+                window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    deleteFantasyTeam(userTeam: UserTeam, idx: number) {
+
+        const requestUrl = `${this.dbUrl}/teams/${userTeam.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.delete<UserTeam>(requestUrl, httpOptions).subscribe(
+
+            (team: UserTeam) => {
+                this.fantasyTeams.splice(idx, 1);
+                this.fantasyTeams = [...this.fantasyTeams];
+                window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    updateFantasyTeam(userTeam: UserTeam) {
+
+        const requestUrl = `${this.dbUrl}/teams/${userTeam.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.put<UserTeam>(requestUrl, userTeam, httpOptions).subscribe(
+
+            (team: UserTeam) => {
+                this.fantasyTeams[this.findFantasyTeamById(team.id)] = team;
+                window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    addFantasyPlayer(team: UserTeam, newPlayer: NewPlayer) {
+
+        const requestUrl = `${this.dbUrl}/players`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                team_id: team.id.toString()
+            }
+        };
+
+        this.http.post<UserPlayer>(requestUrl, newPlayer, httpOptions).subscribe(
+
+            (player: UserPlayer) => {
+
+                this.fantasyTeams[this.findFantasyTeamById(team.id)].players =
+                    this.fantasyTeams[this.findFantasyTeamById(team.id)].players.concat(player);
+
+                window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
+            },
+
+            error => console.log(error)
+        );
+    }
+
+    deleteFantasyPlayer(team: UserTeam, userPlayer: UserPlayer) {
+
+        const requestUrl = `${this.dbUrl}/players/${userPlayer.id}`;
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                team_id: team.id.toString()
+            }
+        };
+
+        this.http.delete<UserPlayer>(requestUrl, httpOptions).subscribe(
+
+            (player: UserPlayer) => {
+
+                const teamIdx = this.findFantasyTeamById(team.id);
+                const playerIdx = this.findFantasyPlayerById(userPlayer.id, teamIdx);
+
+                this.fantasyTeams[teamIdx].players.splice(playerIdx, 1);
+                this.fantasyTeams[teamIdx].players = [...this.fantasyTeams[teamIdx].players];
                 window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
             },
 

@@ -24,7 +24,7 @@
             </li>
 
             <li class="nav-item">
-                <a (click)="expandedState===1?expandedState=0:expandedState=1" class="nav-link active" id="navbar-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===1}"></span>&nbsp;&nbsp;Fantasy Teams</a>
+                <a (click)="setExpand(1)" class="nav-link active" id="navbar-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===1}"></span>&nbsp;&nbsp;Fantasy Teams</a>
             </li>
 
             <ul *ngIf="expandedState===1" class="list-no-bullet">
@@ -42,7 +42,7 @@
             </ul>
 
             <li class="nav-item">
-                <a (click)="expandedState===2?expandedState=0:expandedState=2" class="nav-link active" id="navbar-followed-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===2}"></span>&nbsp;&nbsp;Followed Teams</a>
+                <a (click)="setExpand(2)" class="nav-link active" id="navbar-followed-teams-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===2}"></span>&nbsp;&nbsp;Followed Teams</a>
             </li>
 
             <ul *ngIf="expandedState===2" class="list-no-bullet">
@@ -54,7 +54,7 @@
             </ul>
 
             <li class="nav-item">
-                <a (click)="expandedState===3?expandedState=0:expandedState=3" class="nav-link active" id="navbar-followed-players-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===3}"></span>&nbsp;&nbsp;Followed Players</a>
+                <a (click)="setExpand(3)" class="nav-link active" id="navbar-followed-players-expand"><span class="dropdown-toggle" [ngClass]="{'dropup':expandedState===3}"></span>&nbsp;&nbsp;Followed Players</a>
             </li>
 
             <ul *ngIf="expandedState===3" class="list-no-bullet">

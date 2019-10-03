@@ -35,6 +35,7 @@ import { PlayerComponent } from './components/player/player.component';
 import { UpcomingLeagueFilterPipe } from './pipes/upcoming-league-filter.pipe';
 import { UserFilterPipe } from './pipes/user-filter.pipe';
 import { WagerFilterPipe } from './pipes/wager-filter.pipe';
+import { FantasyFilterPipe } from './pipes/fantasy-filter.pipe';
 
 const appRoutes: Routes = [
 
@@ -168,7 +169,8 @@ const appRoutes: Routes = [
         PlayerComponent,
         UpcomingLeagueFilterPipe,
         UserFilterPipe,
-        WagerFilterPipe
+        WagerFilterPipe,
+        FantasyFilterPipe
     ],
 
     imports: [

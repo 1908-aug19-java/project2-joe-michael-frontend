@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 
-import { UserTeam } from '../../interfaces/user';
+import { UserTeam, UserPlayer, NewPlayer } from '../../interfaces/user';
 
 @Component({
     selector: 'app-user-fantasy-teams',
@@ -27,7 +27,7 @@ export class UserFantasyTeamsComponent implements OnInit {
                 this.teamName = this.userService.fantasyTeams[this.teamIdx].name;
                 this.inputDisabled = true;
             }
-        )
+        );
     }
 
     saveName() {
@@ -35,6 +35,33 @@ export class UserFantasyTeamsComponent implements OnInit {
         this.inputDisabled = true;
         const team: UserTeam = this.userService.fantasyTeams[this.teamIdx];
         team.name = this.teamName;
+
+        this.userService.updateFantasyTeam(team);
     }
 
+    drag(e, player: UserPlayer) {
+
+        e.dataTransfer.setData('player', JSON.stringify(player));
+    }
+
+    allowDrop(e) {
+
+        e.preventDefault();
+    }
+
+    drop(e) {
+
+        e.preventDefault();
+
+        const player: UserPlayer = JSON.parse(e.dataTransfer.getData('player'));
+
+        const newPlayer: NewPlayer = {
+
+            api_player_id: player.api_player_id,
+            name: player.name,
+            type: 'FANTASY'
+        };
+
+        this.userService.addFantasyPlayer(this.userService.fantasyTeams[this.teamIdx], newPlayer);
+    }
 }
