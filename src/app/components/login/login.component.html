@@ -11,9 +11,9 @@
 
             <div class="form-group text-left">
 
-                <label for="login-form-username">Username or Email</label>
+                <label for="login-form-username">Email</label>
                 <input [(ngModel)]="username" name="username" type="text" class="form-control col-12" id="login-form-username" placeholder="">
-                <small *ngIf="loginStatus==2" id="login-username-error-message" class="form-text text-danger">Invalid Username Format</small>
+                <small *ngIf="loginStatus==2" id="login-username-error-message" class="form-text text-danger">Invalid Email Format</small>
 
             </div>
 
@@ -21,11 +21,12 @@
 
                 <label for="login-form-password">Password</label>
                 <input [(ngModel)]="password" name="password" type="password" class="form-control col-12" id="login-form-password" placeholder="">
-                <small *ngIf="loginStatus==3" id="login-combination-error-message" class="form-text text-danger">Invalid Username/Password Combination</small>
+                <small *ngIf="loginStatus==3" id="login-combination-error-message" class="form-text text-danger">Invalid Email/Password Combination</small>
+                <small *ngIf="loginStatus==4" id="login-combination-error-message" class="form-text text-danger">Please fill all fields</small>
 
             </div>
           
-            <button (click)="onSignInClick()" type="submit" class="btn btn-info col-12">Sign In</button>
+            <button (click)="onSignInClick()" type="submit" class="btn btn-info col-12" [ngClass]="{'disabled': loginBegin}">Sign In</button>
           
         </div>
     </form>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
@@ -10,25 +10,36 @@ import { UserService } from '../../services/user.service';
 })
 export class LoginComponent implements OnInit {
 
+    @Output() loginStatusEmitter: EventEmitter<number> = new EventEmitter();
+
     username = '';
     password = '';
 
     loginStatus = 0;
+    loginBegin = false;
+    loginSub;
 
     constructor(private userService: UserService, private router: Router) { }
 
     ngOnInit() {
+
+        this.loginSub = this.userService.loginStatusEmitter.subscribe((status: number) => this.parseStatus(status));
     }
 
     onSignInClick() {
 
-        this.loginStatus = this.userService.logIn(this.username.trim(), this.password.trim());
+        if (!this.loginBegin) {
 
-        if (this.loginStatus === 1) {
+            this.loginBegin = true;
 
-            this.userService.change(true);
-            this.router.navigate(['/user']);
+            this.userService.logIn(this.username.trim(), this.password.trim());
         }
+    }
+
+    parseStatus(status: number) {
+
+        this.loginBegin = false;
+        this.loginStatus = status;
     }
 
 }

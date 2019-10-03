@@ -38,7 +38,7 @@ export class PlayerComponent implements OnInit {
     ngOnInit() {
 
         this.loginSub = this.userService.getLoginStatus().subscribe((item: boolean) => this.loginStatus = item);
-        this.userSub = this.userService.getUser().subscribe((item: User) => this.user = item);
+        this.userSub = this.userService.userEmitter.subscribe((item: User) => this.user = item);
         this.playerSub = this.api.playerEmitter.subscribe((players: Players) => this.sortPlayers(players.api.players));
     }
 

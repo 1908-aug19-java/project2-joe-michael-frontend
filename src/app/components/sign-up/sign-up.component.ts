@@ -18,6 +18,8 @@ export class SignUpComponent implements OnInit {
 
     signUpStatus = 0;
 
+    statusSub;
+
     errorMessages = {
 
         2: 'Invalid email format',
@@ -29,16 +31,24 @@ export class SignUpComponent implements OnInit {
 
 
     ngOnInit() {
+
+        this.statusSub = this.userService.signupStatusEmitter.subscribe((status: number) => this.parseStatus(status));
     }
 
     onSignUpClick() {
 
-        this.signUpStatus = this.userService.signUp(this.email, this.password, this.confirmationPassword);
-        console.log(this.signUpStatus);
+        this.userService.signUp(this.email, this.password, this.confirmationPassword);
+
+    }
+
+    parseStatus(status: number) {
+
+        this.signUpStatus = status;
 
         if (this.signUpStatus === 1) {
 
             this.router.navigate(['/user']);
         }
+
     }
 }

@@ -1,3 +1,41 @@
-<p>
-  user-fantasy-teams works!
-</p>
+<div *ngIf="teamIdx !== -1 else noTeam" class="fantasy-container">
+
+    <div class="fantasy-header">
+
+        <form>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="teamName" [readonly]="inputDisabled" (focusout)="inputDisabled?'':saveName()" (dblclick)="inputDisabled=false"class="form-control-plaintext display-4" name="teamName">
+            </div>
+        </form>
+
+    </div>
+
+    <div>
+
+        <div class="row p-0">
+
+            <div class="col-3 gen-container wager-list">
+
+                <ul class="list-group list-group-flush">
+
+
+                </ul>
+
+            </div>
+
+            <div class="col-8 gen-container">
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<ng-template #noTeam>
+
+    <p class="lead m-0">Nothing to show here :(</p>
+
+</ng-template>

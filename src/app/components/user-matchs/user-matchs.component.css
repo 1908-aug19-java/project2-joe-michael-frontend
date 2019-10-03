@@ -1,6 +1,6 @@
 .list-group{
 
-    max-height: 80vh;
+    max-height: 70vh;
     margin-bottom: 10px;
     overflow-y: scroll;
 }
@@ -59,4 +59,16 @@
 a {
 
     color: inherit;
+    cursor: pointer;
+}
+
+.upcoming-header {
+
+    margin: 20px;
+}
+
+.leagues-dropdown {
+
+    max-height: 40vh;
+    overflow-y: scroll;
 }

@@ -8,6 +8,7 @@ import { Teams, Team } from '../interfaces/team';
 import { League, Leagues } from '../interfaces/leagues';
 import { SeasonStatistics } from '../interfaces/season-statistics';
 import { Players, Player } from '../interfaces/players';
+import { Predictions, Prediction } from '../interfaces/prediction';
 
 import * as apiVar from './key';
 
@@ -30,6 +31,7 @@ export class ApiService {
     teamFixtures: Fixtures = JSON.parse(window.sessionStorage.getItem('teamFixtures'));
     matchFixture: Fixtures = JSON.parse(window.sessionStorage.getItem('matchFixture'));
     player: Players = JSON.parse(window.sessionStorage.getItem('player'));
+    prediction: Prediction = JSON.parse(window.sessionStorage.getItem('prediction'));
 
     validationTeam: Teams;
     validationLeague: League;
@@ -45,6 +47,7 @@ export class ApiService {
     @Output() teamFixturesEmitter: EventEmitter<Fixtures> = new EventEmitter();
     @Output() matchFixtureEmitter: EventEmitter<Fixtures> = new EventEmitter();
     @Output() playerEmitter: EventEmitter<Players> = new EventEmitter();
+    @Output() predictionEmitter: EventEmitter<Prediction> = new EventEmitter();
 
     httpOptions = {
 
@@ -157,6 +160,15 @@ export class ApiService {
         this.http.get<Leagues>(requestUrl, this.httpOptions).subscribe(leagues => this.setLeagues(leagues));
     }
 
+    getLeaguesByTeamId(id: number) {
+
+        const requestUrl = `${this.url}/leagues/team/${id}`;
+
+        this.http.get<Leagues>(requestUrl, this.httpOptions).subscribe(
+            (leagues: Leagues) => this.setLeagues(leagues)
+        );
+    }
+
     setLeagues(leagues: Leagues) {
         window.sessionStorage.setItem('leagues', JSON.stringify(leagues));
         this.leagues = leagues;
@@ -266,5 +278,26 @@ export class ApiService {
     resendPlayer() {
 
         this.setPlayer(this.player);
+    }
+
+    getFixturePredictionById(id: number) {
+
+        const requestUrl = `${this.url}/predictions/${id}`;
+
+        this.http.get<Predictions>(requestUrl, this.httpOptions).subscribe(
+            (predictions: Predictions) => this.setPrediction(predictions.api.predictions[0])
+        );
+    }
+
+    setPrediction(prediction: Prediction) {
+
+        window.sessionStorage.setItem('prediction', JSON.stringify(prediction));
+        this.prediction = prediction;
+        this.predictionEmitter.emit(prediction);
+    }
+
+    resendPrediction() {
+
+        this.setPrediction(this.prediction);
     }
 }

@@ -1,13 +1,13 @@
-export interface Prediction {
+export interface Predictions {
     api: API;
 }
 
 export interface API {
     results: number;
-    predictions: PredictionElement[];
+    predictions: Prediction[];
 }
 
-export interface PredictionElement {
+export interface Prediction {
     match_winner: string;
     under_over: null;
     goals_home: string;

@@ -10,22 +10,11 @@ import { ApiService } from '../services/api.service';
 })
 export class ApiGuard implements CanActivate {
 
-    currentNextDate: string = window.sessionStorage.getItem('nextDate');
-
     constructor(private api: ApiService) {}
 
     canActivate() {
 
-        if (window.sessionStorage.getItem('seasons') === null) {
-
-            this.api.getSeasons();
-        }
-
-        if (window.sessionStorage.getItem('fixtures') === null || this.currentNextDate !== this.api.getNextDate()) {
-
-            this.api.getFixturesByDate();
-            window.sessionStorage.setItem('nextDate', this.api.getNextDate());
-        }
+        this.api.getFixturesByDate();
 
         return true;
     }

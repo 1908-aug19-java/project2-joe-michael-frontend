@@ -9,7 +9,7 @@
 
         <div *ngIf="api.playerEmitter | async as pe" class="player-information-div">
             <p class="display-4 m-0">{{pe.api.players[pe.api.results - 1].firstname}} {{pe.api.players[pe.api.results - 1].lastname}}</p>
-            <p class="lead m-0">&nbsp;{{pe.api.players[1].league}}: {{pe.api.players[1].team_name}}</p>
+            <a routerLink="/teams/{{pe.api.players[1].team_id}}" class="lead m-0">&nbsp;{{pe.api.players[1].league}}: {{pe.api.players[1].team_name}}</a>
             <p class="lead m-0">&nbsp;{{pe.api.players[1].position}}</p>
             <div>
                 <span class="follow-icon">

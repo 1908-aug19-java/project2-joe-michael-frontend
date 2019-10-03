@@ -1,22 +1,209 @@
-<div *ngIf="api.matchFixtureEmitter | async as mfe"class="fixture-container">
+<div *ngIf="api.matchFixtureEmitter | async as mfe"  class="fixture-container">
 
-    <div class="home-team-container">
+    <div class="row general-container">
+        <div class="home-team-container col">
 
-        <img [src]="mfe.api.fixtures[0].homeTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
-        <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].league_id}}/{{mfe.api.fixtures[0].homeTeam.team_id}}" routerLinkActive="active">&nbsp;{{mfe.api.fixtures[0].homeTeam.team_name}}</a>
+            <div class="float-right">
+                    
+                <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].homeTeam.team_id}}" routerLinkActive="active">{{mfe.api.fixtures[0].homeTeam.team_name}}&nbsp;</a>
+                <img [src]="mfe.api.fixtures[0].homeTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
+
+            </div>
+
+        </div>
+
+
+        <div class="away-team-container col">
+
+            <div class="float-left">
+
+                <img [src]="mfe.api.fixtures[0].awayTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
+                <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].awayTeam.team_id}}" routerLinkActive="active">&nbsp;{{mfe.api.fixtures[0].awayTeam.team_name}}</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row general-container match-results">
+
+        <div class="col text-center">
+
+            <p class="lead">{{mfe.api.fixtures[0].round}}</p>
+
+            <div *ngIf="finished; else notFinished">
+            </div>
+
+            <ng-template #notFinished>
+
+                <p class="display-4">Not Started</p>
+
+                <a class="lead m-0 btn btn-outline-secondary" role="button" data-toggle="modal" data-target="#wager-modal" (click)="wagerAvailable=true">{{userService.findWagerByFixture(mfe.api.fixtures[0].fixture_id)!==null?'View Wager':'Make a Wager'}}</a>
+
+            </ng-template>
+
+        </div>
 
     </div>
 
-    <div class="combined-statistics-div text-center">
+    <div class="row general-container">
 
-        <a class="lead"> Combined Statistics </a>
+        <div class="home-team-stat col">
+        </div>
 
+        <div class="away-team-stat col">
+        </div>
     </div>
 
-    <div class="away-team-container">
+    <div *ngIf="!wagerAvailable || userService.findWagerByFixture(mfe.api.fixtures[0].fixture_id) === -1" class="modal fade" tabindex="-1" role="dialog" id="wager-modal" (submit)="validateForm()">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
 
-        <img [src]="mfe.api.fixtures[0].awayTeam.logo" alt="..." class="team-logo-image img-thumbnail rounded">
-        <a class="display-4" routerLink="/teams/{{mfe.api.fixtures[0].league_id}}/{{mfe.api.fixtures[0].awayTeam.team_id}}" routerLinkActive="active">&nbsp;{{mfe.api.fixtures[0].awayTeam.team_name}}</a>
+                    <h5 class="modal-title">Make a Wager</h5>
 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+                    
+                    <form>
+
+                        <div class="form-group">
+
+                            <label for="wager-target-field">Who to wager against?</label>
+
+                            <select *ngIf="userService.users as users" [(ngModel)]="wagerRecipient" (change)="wagerValid[0]=true" name="wager-recipient" class="form-control" id="wager-target-field" [ngClass]="{'is-invalid': !wagerValid[0]}">
+
+                                <option *ngFor="let user of users | userFilter: userService.user.id" [value]="user.id">{{(user.name)?(user.name):(user.email)}}</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="wager-victor-field">Who do you think will win?</label>
+
+                            <select [(ngModel)]="wagerVictor" (change)="wagerValid[1] = true" name="wager-victor" class="form-control" id="wager-victor-field" [ngClass]="{'is-invalid': !wagerValid[1]}">
+
+                                <option value="1">Home ({{mfe.api.fixtures[0].homeTeam.team_name}})</option>
+                                <option value="2">Draw</option>
+                                <option value="0">Away ({{mfe.api.fixtures[0].awayTeam.team_name}})</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="wager-amount-field">How much to wager?</label>
+
+                            <div class="input-group mb-3">
+
+                                <div class="input-group-prepend">
+
+                                    <span class="input-group-text">$</span>
+
+                                </div>
+
+                                <input [(ngModel)]="wagerAmount" (change)="wagerValid[2] = true" name="wager-amount" type="number" min="0" step="0.01" class="form-control" aria-label="Amount" [ngClass]="{'is-invalid': !wagerValid[2]}">
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                    <small *ngIf= "userService.findWagerByFixture(mfe.api.fixtures[0].fixture_id) !== -1" class="lead text-success">
+                        Wager Successfully Created
+                    </small>
+
+                    <small *ngIf= "!wagerAvailable && userService.findWagerByFixture(mfe.api.fixtures[0].fixture_id) === -1" class="lead text-success">
+                        Something went wrong! Try again later.
+                    </small>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-info" (click)="validateForm()" type="submit" [ngClass]="{'disabled': !wagerAvailable}">Send Wager</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="userService.wagers[userService.findWagerByFixture(mfe.api.fixtures[0].fixture_id)] as wager" class="modal fade" tabindex="-1" role="dialog" id="wager-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title">Wager Details for Match #{{wager.api_game_id}}</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+                    
+                    <p class="lead m-0 float-left">Initiating User</p>
+                    <div class="float-right">
+                        
+                        <p *ngIf="wager.initiating.name" class="lead m-0 float-right">{{wager.initiating.name}}</p>
+                        <br style="clear: both;" />
+                        <p class="lead m-0 float-right">{{wager.initiating.email}}</p>
+
+                    </div>
+
+                    <br style="clear: both;" />
+
+                    <p class="lead m-0 float-left">Receiving User</p>
+                    <div class="float-right">
+
+                        <p *ngIf="wager.recieving.name" class="lead m-0 float-right">{{wager.recieving.name}}</p>
+                        <br *ngIf="wager.recieving.name" style="clear: both;" />
+                        <p class="lead m-0 float-right">{{wager.recieving.email}}</p>
+
+                    </div>
+
+                    <br style="clear: both;" />
+
+                    <p class="lead m-0 float-left">Wager Amount</p>
+                    <p class="lead m-0 float-right">${{wager.amt.toFixed(2)}}</p>
+
+                    <br style="clear: both;" />
+
+                    <p class="lead m-0 float-left">Accepted</p>
+                    <p class="lead m-0 float-right">{{wager.accepted?wager.resolution?'FINISHED':'ACCEPTED':'PENDING'}}</p>
+
+                    <br style="clear: both;" />
+
+                    <p class="lead m-0 float-left">Bet</p>
+                    <div class="float-right" [ngSwitch]="wager.guess">
+
+                        <p *ngSwitchCase="0" class="lead m-0 float-right">{{mfe.api.fixtures[0].homeTeam.team_name}} Wins</p>
+                        <p *ngSwitchCase="1" class="lead m-0 float-right">{{mfe.api.fixtures[0].awayTeam.team_name}} Wins</p>
+                        <br *ngIf="wager.guess != 2" style="clear: both;" />
+                        <p class="lead m-0 float-right">{{guessStringEnum[wager.guess]}}</p>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button *ngIf="(!wager.accepted && wager.recieving.id === userService.user.id)" type="button" class="btn btn-info" type="submit" (click)="userService.acceptWager(wager.id, true)">Accept</button>
+                    <button *ngIf="(!wager.accepted && wager.recieving.id === userService.user.id)" type="button" class="btn btn-danger" type="submit" (click)="userService.acceptWager(wager.id, false)">Decline</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
