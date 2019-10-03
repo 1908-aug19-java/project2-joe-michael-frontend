@@ -139,7 +139,7 @@
                                     <h6 class="dropdown-header">Add to fantasy team...</h6>
                                     <div class="dropdown-divider"></div>
 
-                                    <a *ngFor="let team of userService.tempFantasyTeams" class="dropdown-item">{{team}}</a>
+                                    <a *ngFor="let team of userService.fantasyTeams; let i = index" class="dropdown-item" [ngClass]="{'disabled text-muted': userService.findFantasyPlayerByApiId(player.player_id, i) !== -1}" (click)="userService.findFantasyPlayerByApiId(player.player_id, i) !== -1 ? '' : addFantasyPlayer(i, player)">{{team.name}}</a>
 
                                 </div>
                             </td>

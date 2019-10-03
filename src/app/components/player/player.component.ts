@@ -4,7 +4,7 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { UserService } from '../../services/user.service';
 
-import { User } from '../../interfaces/user';
+import { User, UserPlayer, NewPlayer } from '../../interfaces/user';
 import { Players, Player } from '../../interfaces/players';
 
 @Component({
@@ -110,5 +110,17 @@ export class PlayerComponent implements OnInit {
 
             return 1;
         }
+    }
+
+    addFantasyPlayer(teamIdx: number, player: Player) {
+
+        const newPlayer: NewPlayer = {
+
+            api_player_id: player.player_id,
+            name: player.player_name,
+            type: 'FANTASY'
+        };
+
+        this.userService.addFantasyPlayer(this.userService.fantasyTeams[teamIdx], newPlayer);
     }
 }

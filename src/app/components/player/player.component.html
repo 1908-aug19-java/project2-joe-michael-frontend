@@ -14,11 +14,13 @@
             <div>
                 <span class="follow-icon">
 
-                    <a (click)="userService.followPlayer(pe.api.players[0])">&nbsp;
-                        <em class="fa fa-2x" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(pe.api.players[0])!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(pe.api.players[0])==-1}"></em>
+                    <a (click)="userService.followPlayer(pe.api.players[1])">&nbsp;
+                        <em class="fa fa-2x" [ngClass]="{'fa-bookmark': userService.isPlayerFollowed(pe.api.players[1])!=-1, 'fa-bookmark-o': userService.isPlayerFollowed(pe.api.players[1])==-1}"></em>
                     </a>
                 </span>
+
                 &nbsp;
+
                 <span class="dropright">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <em class="fa fa-2x fa-list"></em>
@@ -28,7 +30,7 @@
                         <h6 class="dropdown-header">Add to fantasy team...</h6>
                         <div class="dropdown-divider"></div>
 
-                        <a *ngFor="let team of userService.tempFantasyTeams" class="dropdown-item">{{team}}</a>
+                        <a *ngFor="let team of userService.fantasyTeams; let i = index" class="dropdown-item" [ngClass]="{'disabled text-muted': userService.findFantasyPlayerByApiId(pe.api.players[1].player_id, i) !== -1}" (click)="userService.findFantasyPlayerByApiId(pe.api.players[1].player_id, i) !== -1 ? '' : addFantasyPlayer(i, pe.api.players[1])">{{team.name}}</a>
                     </div>
                 </span>
             </div>

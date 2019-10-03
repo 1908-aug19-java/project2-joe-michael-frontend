@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular
 import { UserService } from '../../services/user.service';
 import { ApiService } from '../../services/api.service';
 
-import { User } from '../../interfaces/user';
+import { User, NewPlayer } from '../../interfaces/user';
 import { Team, Teams } from '../../interfaces/team';
 import { League, Leagues } from '../../interfaces/leagues';
 import { SeasonStatistics, Statistics } from '../../interfaces/season-statistics';
@@ -284,5 +284,17 @@ export class TeamComponent implements OnInit {
         }
 
         this.sortedLeaguesEmitter.emit(this.sortedLeagues);
+    }
+
+    addFantasyPlayer(teamIdx: number, player: Player) {
+
+        const newPlayer: NewPlayer = {
+
+            api_player_id: player.player_id,
+            name: player.player_name,
+            type: 'FANTASY'
+        };
+
+        this.userService.addFantasyPlayer(this.userService.fantasyTeams[teamIdx], newPlayer);
     }
 }

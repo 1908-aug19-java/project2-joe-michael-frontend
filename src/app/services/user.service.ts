@@ -40,6 +40,7 @@ export class UserService {
 
     fantasyTeams: UserTeam[] = JSON.parse(window.sessionStorage.getItem('fantasyTeams')) || [];
     fantasyPlayers: UserPlayer[] = JSON.parse(window.sessionStorage.getItem('fantasyPlayers')) || [];
+
     followedTeams: UserTeam[] = JSON.parse(window.sessionStorage.getItem('followedTeams')) || [];
     followedPlayers: UserPlayer[] = JSON.parse(window.sessionStorage.getItem('followedPlayers')) || [];
 
@@ -176,6 +177,19 @@ export class UserService {
         return -1;
     }
 
+    findFantasyPlayerByApiId(id: number, teamIdx: number): number {
+
+        for (const obj of this.fantasyTeams[teamIdx].players) {
+
+            if (obj.api_player_id === id) {
+
+                return this.fantasyTeams[teamIdx].players.indexOf(obj);
+            }
+        }
+
+        return -1;
+    }
+
     acceptWager(id: number, res: boolean) {
 
         const updatedWager: UserWager = this.wagers[this.findWagerById(id)];
@@ -296,6 +310,7 @@ export class UserService {
 
         window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
         window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
+
         window.sessionStorage.setItem('fantasyPlayers', JSON.stringify(this.fantasyPlayers));
         window.sessionStorage.setItem('fantasyTeams', JSON.stringify(this.fantasyTeams));
     }
@@ -376,6 +391,20 @@ export class UserService {
 
         this.http.get<User[]>(requestUrl, this.makeHeaders(this.user.id, this.token)).subscribe(
             (users: User[]) => this.setUsers(users)
+        );
+    }
+
+    addUser(user: UserLogin) {
+
+        const requestUrl = `${this.dbUrl}/users`;
+
+        this.http.post<User>(requestUrl, user, {observe: 'response'}).subscribe(
+            (resp: HttpResponse<User>) => {
+                this.parseLoginUser(resp);
+                this.signupStatusEmitter.emit(1);
+            },
+
+            (error) => this.signupStatusEmitter.emit(5)
         );
     }
 
@@ -745,20 +774,6 @@ export class UserService {
             },
 
             error => console.log(error)
-        );
-    }
-
-    addUser(user: UserLogin) {
-
-        const requestUrl = `${this.dbUrl}/users`;
-
-        this.http.post<User>(requestUrl, user, {observe: 'response'}).subscribe(
-            (resp: HttpResponse<User>) => {
-                this.parseLoginUser(resp);
-                this.signupStatusEmitter.emit(1);
-            },
-
-            (error) => this.signupStatusEmitter.emit(5)
         );
     }
 
