@@ -350,6 +350,36 @@ export class UserService {
         );
     }
 
+    updateUser(){
+        const requestUrl = `${this.dbUrl}/users/${this.user.id}`
+        console.log("here")
+
+        const httpOptions = {
+
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            ),
+
+            params: {
+
+                user_id: this.user.id.toString()
+            }
+        };
+
+        this.http.put<User>(requestUrl, this.user, this.makeHeaders(this.user.id, this.token)).subscribe(
+
+            (user: User) => {
+
+                window.sessionStorage.setItem('user', JSON.stringify(this.user));
+            },
+
+            error => console.log(error)
+        );
+    }
+
     addFollowedPlayer(newPlayer: NewPlayer) {
 
         const requestUrl = `${this.dbUrl}/players`;
