@@ -54,7 +54,7 @@ export class UserService {
         #################
     */
 
-    followPlayer(player: Player) {
+    followPlayer(player: Player): void {
 
         const obj: NewPlayer = {
 
@@ -75,7 +75,7 @@ export class UserService {
         }
     }
 
-    followTeam(team: Team, leagues: Leagues) {
+    followTeam(team: Team, leagues: Leagues): void {
 
         const obj: NewTeam = {
 
@@ -190,7 +190,7 @@ export class UserService {
         return -1;
     }
 
-    acceptWager(id: number, res: boolean) {
+    acceptWager(id: number, res: boolean): void {
 
         const updatedWager: UserWager = this.wagers[this.findWagerById(id)];
 
@@ -203,18 +203,6 @@ export class UserService {
 
         this.updateWager(updatedWager);
 
-    }
-
-    makeHeaders(userId: number, token: string) {
-
-        const httpOptions = {
-            headers: new HttpHeaders({
-                user_id: userId.toString(),
-                token
-            }),
-        };
-
-        return httpOptions;
     }
 
     logIn(username: string, password: string) {
@@ -306,7 +294,7 @@ export class UserService {
 
                 return 0;
             }
-            );
+        );
 
         window.sessionStorage.setItem('followedPlayers', JSON.stringify(this.followedPlayers));
         window.sessionStorage.setItem('followedTeams', JSON.stringify(this.followedTeams));
@@ -388,8 +376,17 @@ export class UserService {
     getUsers() {
 
         const requestUrl = `${this.dbUrl}/users`;
+        const httpOptions = {
 
-        this.http.get<User[]>(requestUrl, this.makeHeaders(this.user.id, this.token)).subscribe(
+            headers: new HttpHeaders(
+                {
+                    user_id: this.user.id.toString(),
+                    token: this.token
+                }
+            )
+        };
+
+        this.http.get<User[]>(requestUrl, httpOptions).subscribe(
             (users: User[]) => this.setUsers(users)
         );
     }

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { FixtureService } from '../../services/fixture.service';
 import { ApiService } from '../../services/api.service';
 
 import { Fixture, Fixtures } from '../../interfaces/fixtures';
@@ -14,7 +13,7 @@ import { Leagues, League, LeagueRef } from '../../interfaces/leagues';
 })
 export class UserMatchsComponent implements OnInit {
 
-    constructor(private fixtureService: FixtureService, private api: ApiService) { }
+    constructor(private api: ApiService) { }
 
     fixtureSub;
 

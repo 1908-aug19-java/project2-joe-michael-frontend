@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light" aria-labelledby="general-naviagation" id="user-side-navbar">
 
-    <div class="navbar-header w-100 side-navbar-name">
+    <div *ngIf="userService.user !== null" class="navbar-header w-100 side-navbar-name">
 
         <button *ngIf="userService.user.name==null else noName" class="btn btn-warning col-10 offset-1 side-navbar-finish-button" (click)="finishAccount()">
         Finish Account Creation
@@ -36,7 +36,7 @@
                 <hr *ngIf="userService.fantasyTeams.length > 0 && userService.fantasyTeams.length < 3" />
 
                 <li *ngIf="!(userService.user.acct_level === 0 && userService.fantasyTeams.length >= 3)" class="nav-item">
-                    <a routerLink="/user/fantasy-teams" routerLinkActive="active" (click)="createNewFantasyTeam()" class="nav-link p-0">Create a new team...</a>
+                    <a (click)="createNewFantasyTeam()" class="nav-link p-0">Create a new team...</a>
                 </li>
 
             </ul>
@@ -69,10 +69,6 @@
 
             <li class="nav-item">
                 <a class="nav-link" routerLink="/user/matchs" routerLinkActive="active" id="navbar-upcoming-matches">Upcoming Matchs</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/user/predictions" routerLinkActive="active" id="navbar-user-predictions">Predictions</a>
             </li>
 
             <li class="nav-item">

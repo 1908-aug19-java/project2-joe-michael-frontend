@@ -10,6 +10,11 @@ export class WagerFilterPipe implements PipeTransform {
 
     transform(wagers: UserWager[], filter: number): UserWager[] {
 
+        if (wagers.length === 0) {
+
+            return wagers;
+        }
+
         switch (filter) {
 
             case 0:

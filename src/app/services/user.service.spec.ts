@@ -1,12 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
-import { LoginService } from './login.service';
+import { UserService } from './user.service';
 
-describe('LoginService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('UserService', () => {
+  beforeEach(() => TestBed.configureTestingModule({
+
+      imports: [
+          HttpClientModule,
+          FormsModule,
+          RouterModule.forRoot([
+              {path: '', component: UserService}
+          ])
+      ]
+  }));
 
   it('should be created', () => {
-    const service: LoginService = TestBed.get(LoginService);
+    const service: UserService = TestBed.get(UserService);
     expect(service).toBeTruthy();
   });
 });

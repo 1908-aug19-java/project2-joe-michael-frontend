@@ -1,25 +1,38 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { UserHomeComponent } from './user-home.component';
 
 describe('UserHomeComponent', () => {
-  let component: UserHomeComponent;
-  let fixture: ComponentFixture<UserHomeComponent>;
+    let component: UserHomeComponent;
+    let fixture: ComponentFixture<UserHomeComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ UserHomeComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                UserHomeComponent
+            ],
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserHomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+            imports: [
+                FormsModule,
+                HttpClientModule,
+                RouterModule.forRoot([
+                    {path: '', component: UserHomeComponent}
+                ])
+            ]
+        })
+        .compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(UserHomeComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

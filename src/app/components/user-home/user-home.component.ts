@@ -11,7 +11,7 @@ export class UserHomeComponent implements OnInit {
 
     constructor(public userService: UserService) { }
 
-    user: User = this.userService.user;
+    user: User = this.userService.user || null;
 
     hasName: boolean;
     showForm = false;
@@ -30,15 +30,19 @@ export class UserHomeComponent implements OnInit {
 
     setInfo() {
 
-        this.players = JSON.parse(sessionStorage.getItem('followedPlayers'));
-        this.teams = JSON.parse(sessionStorage.getItem('followedTeams'));
+        this.players = JSON.parse(sessionStorage.getItem('followedPlayers')) || '';
+        this.teams = JSON.parse(sessionStorage.getItem('followedTeams')) || '';
         this.numFollowedPlayers = this.players.length;
         this.numFollowedTeams = this.teams.length;
     }
 
     checkName() {
 
-        if (this.user.name === null || this.user.name === '') {
+        if (this.user === null) {
+
+            this.hasName = false;
+
+        } else if (this.user.name === '') {
 
             this.hasName = false;
 

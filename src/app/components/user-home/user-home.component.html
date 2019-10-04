@@ -1,4 +1,4 @@
-<div class="text-center m-0 d-flex flex-column">
+<div *ngIf="user !== null" class="text-center m-0 d-flex flex-column">
     <h1 class = "display-4 text-dark" *ngIf="hasName">Welcome {{user.name}}</h1>
     <h1 class = "display-4 text-dark" *ngIf="!hasName">Welcome {{user.email}}</h1>
     <h4 class = "lead text-dark" id="landing-requests-user"></h4>

@@ -27,7 +27,11 @@ export class UserWagerComponent implements OnInit {
     ngOnInit() {
 
         this.activeWagerIdx = 0;
-        this.api.getFixtureById(this.userService.wagers[this.activeWagerIdx].api_game_id);
+
+        if (this.userService.wagers.length) {
+
+            this.api.getFixtureById(this.userService.wagers[this.activeWagerIdx].api_game_id);
+        }
 
         this.mfeSub = this.api.matchFixtureEmitter.subscribe(
             (fixtures: Fixtures) => this.parseMatchFixture(fixtures.api.fixtures[0], this.activeWagerIdx)

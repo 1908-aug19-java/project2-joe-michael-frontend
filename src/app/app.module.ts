@@ -12,12 +12,9 @@ import { UserHomeComponent } from './components/user-home/user-home.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserTeamNavComponent } from './components/user-team-nav/user-team-nav.component';
 import { UserWagerComponent } from './components/user-wager/user-wager.component';
-import { UserPredictionsComponent } from './components/user-predictions/user-predictions.component';
 import { UserMatchsComponent } from './components/user-matchs/user-matchs.component';
 import { UserPageComponent } from './components/user-page/user-page.component';
 import { UserFantasyTeamsComponent } from './components/user-fantasy-teams/user-fantasy-teams.component';
-import { UserFollowedTeamsComponent } from './components/user-followed-teams/user-followed-teams.component';
-import { UserFollowedPlayersComponent } from './components/user-followed-players/user-followed-players.component';
 import { UserMatchComponent } from './components/user-match/user-match.component';
 import { TeamsComponent } from './components/teams/teams.component';
 import { TeamComponent } from './components/team/team.component';
@@ -80,16 +77,6 @@ const appRoutes: Routes = [
             },
 
             {
-                path: 'followed-teams',
-                component: UserFollowedTeamsComponent
-            },
-
-            {
-                path: 'followed-players',
-                component: UserFollowedPlayersComponent
-            },
-
-            {
                 path: 'wagers',
                 component: UserWagerComponent
             },
@@ -104,11 +91,6 @@ const appRoutes: Routes = [
                 path: 'matchs/:id',
                 component: UserMatchComponent,
                 canActivate: [MatchFixtureGuard]
-            },
-
-            {
-                path: 'predictions',
-                component: UserPredictionsComponent
             },
 
             {
@@ -155,12 +137,9 @@ const appRoutes: Routes = [
         LandingComponent,
         UserTeamNavComponent,
         UserWagerComponent,
-        UserPredictionsComponent,
         UserMatchsComponent,
         UserPageComponent,
         UserFantasyTeamsComponent,
-        UserFollowedTeamsComponent,
-        UserFollowedPlayersComponent,
         UserMatchComponent,
         TeamsComponent,
         TeamComponent,
